@@ -14,7 +14,7 @@
 2. As a user, I want to split the bill accordingly, so I take a picture of the bill, then manually input the names of
  the people who ordered each item. (Josh)
     - Use Case(s):
-      - Take a picture of the bill
+      - Upload a picture of the bill
       - Manually input the names of the people who ordered each item
 3. As a user, I want to write off someone’s debt because they paid me back. (Edison)
     - Use Case(s):
