@@ -3,7 +3,7 @@ package entity;
 /**
  * Factory for creating dishes.
  */
-public interface DishFactory {
+public class DishFactory {
     /**
      * Creates a new dish
      * @param name the name of the dish
@@ -11,5 +11,7 @@ public interface DishFactory {
      * @param consumers an array of all individuals who ordered this dish
      * @return the new dish
      */
-    Dish create(String name, double price, String[] consumers);
+    Dish create(String name, double price, String[] consumers){
+        return new Dish(name, price, consumers);
+    }
 }
