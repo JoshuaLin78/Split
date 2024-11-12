@@ -1,22 +1,25 @@
 package entity;
 
 /**
- * The dish class.
+ * The order class.
  */
-public class Dish {
+public class Order {
     private final String name;
     private final double price;
+    private final int quantity;
     private final String[] consumers;
 
     /**
-     * Dish Constructor
+     * Order Constructor
      * @param name the name of the dish
      * @param price the price of the dish (in Canadian dollars)
+     * @param quantity the number of times this dish was ordered
      * @param consumers an array of all individuals who ordered this dish
      */
-    public Dish(String name, double price, String[] consumers) {
+    public Order(String name, double price, int quantity, String[] consumers) {
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
         this.consumers = consumers;
     }
 
@@ -34,6 +37,14 @@ public class Dish {
      */
     double getPrice(){
         return price;
+    }
+
+    /**
+     * Returns the quantity of the dish
+     * @return the number of times the dish was ordered
+     */
+     int getQuantity(){
+        return quantity;
     }
 
     /**
