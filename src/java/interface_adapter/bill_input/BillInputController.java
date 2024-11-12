@@ -4,7 +4,7 @@ import entity.Dish;
 import use_cases.bill_input.BillInputInputData;
 import use_cases.bill_input.BillInputInputBoundary;
 
-import java.util.Map;
+import java.util.List;
 
 public class BillInputController {
     private final BillInputInputBoundary userbillInputUseCaseInteractor;
@@ -13,8 +13,8 @@ public class BillInputController {
         this.userbillInputUseCaseInteractor = userbillInputUseCaseInteractor;
     }
 
-    public void execute(Map<Dish, Integer> contents, Dish[] dishes){
-        final BillInputInputData billInputInputData = new BillInputInputData(contents, dishes);
+    public void execute(List<Dish> orders, double tax, double tip, double total){
+        final BillInputInputData billInputInputData = new BillInputInputData(orders, tax, tip, total);
 
         userbillInputUseCaseInteractor.execute(billInputInputData);
     }

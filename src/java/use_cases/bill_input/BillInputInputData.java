@@ -2,30 +2,45 @@ package use_cases.bill_input;
 
 import entity.Dish;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * The Input Data for the Bill Input Use Case.
  */
 public class BillInputInputData {
-    private final Map<Dish, Integer> contents;
-    private final Dish[] dishes;
+    private final List<Dish> orders;
+    private final double tax;
+    private final double tip;
+    private final double total;
 
     /**
      * Constructor
-     * @param contents a map of the contents of the bill, mapping the dish to its quantity
-     * @param dishes an array of Dish objects
+     * @param orders the list of all orders on the bill
+     * @param tax the tax percentage of the bill
+     * @param tip the tip percentage of the bill
+     * @param total the total price of the bill
      */
-    public BillInputInputData(Map<Dish, Integer> contents, Dish[] dishes) {
-        this.contents = contents;
-        this.dishes = dishes;
+    public BillInputInputData(List<Dish> orders, double tax, double tip, double total) {
+        this.orders = orders;
+        this.tax = tax;
+        this.tip = tip;
+        this.total = total;
     }
 
-    Map<Dish, Integer> getContents() {
-        return contents;
+    public List<Dish> getOrders() {
+        return orders;
     }
 
-    public Dish[] getDishes() {
-        return dishes;
+    public double getTax() {
+        return tax;
+    }
+
+    public double getTip() {
+        return tip;
+    }
+
+    public double getTotal() {
+        return total;
     }
 }
