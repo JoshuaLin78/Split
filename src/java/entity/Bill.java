@@ -1,34 +1,34 @@
 package entity;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple Bill class
  */
 public class Bill {
 
-    private final Map<Dish, Integer> contents;
+    private final List<Order> contents;
 
     /**
-     * Initializes an empty Map
+     * Initializes an empty list
      */
     public Bill() {
-        contents = new HashMap<>();
+        contents = new ArrayList<>();
     }
 
     /**
-     * @return A Map object containing the Dish object and its associated quantity
+     * @return A List object containing the Order object
      */
-    public Map getContents() {
+    public List<Order> getContents() {
         return contents;
     }
 
     /**
-     * Add the given dish object and its associated quantity to the stored contents
+     * Add the given order to the stored contents
      */
-    public void addContent(Dish dish, int amount) {
-        contents.put(dish, amount);
+    public void addOrder(Order order) {
+        contents.add(order);
     }
 
 }
