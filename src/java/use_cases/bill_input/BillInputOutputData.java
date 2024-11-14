@@ -2,14 +2,16 @@ package use_cases.bill_input;
 
 import entity.Debtor;
 
-public class BillInputOutputData {
-    private final Debtor debtors;
+import java.util.List;
 
-    public BillInputOutputData(Debtor debtors) {
+public class BillInputOutputData {
+    private final List<Debtor> debtors;
+
+    public BillInputOutputData(List<Debtor> debtors) {
         this.debtors = debtors;
     }
 
-    public Debtor getDebtors() {
+    public List<Debtor> getDebtors() {
         return debtors;
     }
 }
