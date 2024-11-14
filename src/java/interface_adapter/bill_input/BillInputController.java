@@ -1,6 +1,6 @@
 package interface_adapter.bill_input;
 
-import entity.Dish;
+import entity.Order;
 import use_cases.bill_input.BillInputInputData;
 import use_cases.bill_input.BillInputInputBoundary;
 
@@ -13,7 +13,7 @@ public class BillInputController {
         this.userbillInputUseCaseInteractor = userbillInputUseCaseInteractor;
     }
 
-    public void execute(List<Dish> orders, double tax, double tip, double total){
+    public void execute(List<Order> orders, double tax, double tip, double total){
         final BillInputInputData billInputInputData = new BillInputInputData(orders, tax, tip, total);
 
         userbillInputUseCaseInteractor.execute(billInputInputData);

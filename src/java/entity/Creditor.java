@@ -21,7 +21,7 @@ public class Creditor {
      * Returns the name of the creditor
      * @return the name of the creditor
      */
-    String getName() {
+    public String getName() {
         return name;
     }
 
