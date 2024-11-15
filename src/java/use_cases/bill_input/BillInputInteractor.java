@@ -22,8 +22,8 @@ public class BillInputInteractor implements BillInputInputBoundary {
         List<Debtor> debtors = new ArrayList<>();
 
         for(Order order: billInputInputData.getOrders()){
-            double pricePerPerson = order.getPrice() / order.getConsumers().length * (1 + billInputInputData.getTax()) *
-                    (1 + billInputInputData.getTip());
+            double pricePerPerson = order.getPrice() / order.getConsumers().length * (1 + billInputInputData.getTax() /
+                    100) * (1 + billInputInputData.getTip() / 100);
             for(String consumer: order.getConsumers()){
                 if (consumer.equals("Me*")){
                     continue;
@@ -38,8 +38,13 @@ public class BillInputInteractor implements BillInputInputBoundary {
                 if (newDebtor) {
                     debtors.add(new Debtor(consumer, pricePerPerson, pricePerPerson));
                 }
-                for (Debtor debtor: debtors){
-                    if(debtor.getName().equals(consumer)) {debtor.addCurrDebt(pricePerPerson);}
+                else {
+                    for (Debtor debtor : debtors) {
+                        if (debtor.getName().equals(consumer)) {
+                            debtor.addCurrDebt(pricePerPerson);
+                            break;
+                        }
+                    }
                 }
             }
         }

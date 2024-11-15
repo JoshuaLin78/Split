@@ -10,7 +10,10 @@ import java.util.Map;
 
 import interface_adapter.bill_input.BillInputController;
 import entity.Order;
+import interface_adapter.bill_input.BillInputPresenter;
 import use_cases.bill_input.BillInputInputBoundary;
+import use_cases.bill_input.BillInputInteractor;
+import use_cases.bill_input.BillInputOutputBoundary;
 import use_cases.bill_input.MockBillInputInteractor;
 
 public class BillInputView extends JFrame {
@@ -330,10 +333,13 @@ public class BillInputView extends JFrame {
     }
 
     public static void main(String[] args) {
-        BillInputInputBoundary mockInteractor = new MockBillInputInteractor();
+        //BillInputInputBoundary mockInteractor = new MockBillInputInteractor();
+        BillInputOutputBoundary billInputOutputBoundary = new BillInputPresenter();
+        BillInputInputBoundary billInputInteractor = new BillInputInteractor(billInputOutputBoundary);
 
         //just replace mockInteractor with the real one for testing
-        BillInputController controller = new BillInputController(mockInteractor);
+        //BillInputController controller = new BillInputController(mockInteractor);
+        BillInputController controller = new BillInputController(billInputInteractor);
         SwingUtilities.invokeLater(() -> new BillInputView(controller));
     }
 }
