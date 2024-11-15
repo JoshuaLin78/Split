@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Arrays;
+
 /**
  * The order class.
  */
@@ -53,5 +55,15 @@ public class Order {
      */
     public String[] getConsumers(){
         return consumers;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", consumers=" + Arrays.toString(consumers) +
+                '}';
     }
 }
