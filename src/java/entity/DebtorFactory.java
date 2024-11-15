@@ -11,7 +11,7 @@ public class DebtorFactory {
      * @param totalDebt the total amount of money (in Canadian dollars) the Debtor owes the user
      * @return the new debtor
      */
-    Debtor create(String name, double currDebt, double totalDebt) {
+    public Debtor create(String name, double currDebt, double totalDebt) {
         return new Debtor(name, currDebt, totalDebt);
     }
 }

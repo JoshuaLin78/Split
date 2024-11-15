@@ -1,6 +1,7 @@
 package use_cases.bill_input;
 
 import entity.Debtor;
+import entity.DebtorFactory;
 import entity.Order;
 
 import java.util.ArrayList;
@@ -8,9 +9,11 @@ import java.util.List;
 
 public class BillInputInteractor implements BillInputInputBoundary {
     private final BillInputOutputBoundary userPresenter;
+    private final DebtorFactory debtorFactory;
 
-    public BillInputInteractor(BillInputOutputBoundary billInputOutputBoundary) {
+    public BillInputInteractor(BillInputOutputBoundary billInputOutputBoundary, DebtorFactory debtorFactory) {
         this.userPresenter = billInputOutputBoundary;
+        this.debtorFactory = debtorFactory;
     }
 
     /**
@@ -36,17 +39,21 @@ public class BillInputInteractor implements BillInputInputBoundary {
                     }
                 }
                 if (newDebtor) {
-                    debtors.add(new Debtor(consumer, pricePerPerson, pricePerPerson));
+                    debtors.add(debtorFactory.create(consumer, pricePerPerson, 0));
                 }
                 else {
                     for (Debtor debtor : debtors) {
                         if (debtor.getName().equals(consumer)) {
-                            debtor.addCurrDebt(pricePerPerson);
+                            debtor.addToCurrDebt(pricePerPerson);
                             break;
                         }
                     }
                 }
             }
+        }
+
+        for (Debtor debtor : debtors) {
+            debtor.addToTotalDebt(debtor.getCurrDebt());
         }
 
         final BillInputOutputData billInputOutputData = new BillInputOutputData(debtors);
