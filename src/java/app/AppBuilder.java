@@ -6,12 +6,14 @@ import javax.swing.*;
 
 import entity.DebtorFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.bill_confirmation.BillConfirmationViewModel;
 import interface_adapter.bill_input.BillInputController;
 import interface_adapter.bill_input.BillInputPresenter;
 import interface_adapter.bill_input.BillInputViewModel;
 import use_cases.bill_input.BillInputInputBoundary;
 import use_cases.bill_input.BillInputInteractor;
 import use_cases.bill_input.BillInputOutputBoundary;
+import view.BillConfirmationView;
 import view.BillInputView;
 import view.ViewManager;
 
@@ -28,6 +30,8 @@ public class AppBuilder {
 
     private BillInputView billInputView;
     private BillInputViewModel billInputViewModel;
+    private BillConfirmationView billConfirmationView;
+    private BillConfirmationViewModel billConfirmationViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -46,7 +50,7 @@ public class AppBuilder {
 
     public AppBuilder addBillInputUseCase() {
         final BillInputOutputBoundary billInputOutputBoundary = new BillInputPresenter(viewManagerModel,
-                billInputViewModel);
+                billInputViewModel, billConfirmationViewModel);
         final BillInputInputBoundary billInputInteractor = new BillInputInteractor(billInputOutputBoundary,
                 debtorFactory);
 

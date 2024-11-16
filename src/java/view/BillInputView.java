@@ -20,7 +20,7 @@ import use_cases.bill_input.BillInputInteractor;
 import use_cases.bill_input.BillInputOutputBoundary;
 import use_cases.bill_input.MockBillInputInteractor;
 
-public class BillInputView extends JFrame implements ActionListener, PropertyChangeListener {
+public class BillInputView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "Bill Input";
 
     private JTextField imageNameField;
@@ -37,9 +37,9 @@ public class BillInputView extends JFrame implements ActionListener, PropertyCha
         this.billInputViewModel = billInputViewModel;
         billInputViewModel.addPropertyChangeListener(this);
 
-        setTitle("New Bill Entry");
+        //setTitle("New Bill Entry");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
         // header
@@ -180,7 +180,7 @@ public class BillInputView extends JFrame implements ActionListener, PropertyCha
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        setVisible(true);
+        //setVisible(true);
     }
 
     private void submitBill() {

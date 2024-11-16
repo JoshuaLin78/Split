@@ -12,7 +12,10 @@ public class Main {
      */
     public static void main(String[] args) {
         final AppBuilder appBuilder = new AppBuilder();
-        final JFrame application = appBuilder.addBillInputView().addBillInputUseCase().build();
+        final JFrame application = appBuilder
+                                            .addBillInputView()
+                                            .addBillInputUseCase()
+                                            .build();
 
         application.pack();
         application.setVisible(true);
