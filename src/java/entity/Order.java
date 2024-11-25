@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Arrays;
+
 /**
  * The order class.
  */
@@ -27,7 +29,7 @@ public class Order {
      * Returns the name of the dish
      * @return the name of the dish
      */
-    String getName(){
+    public String getName(){
         return name;
     }
 
@@ -35,7 +37,7 @@ public class Order {
      * Returns the price of the dish in Canadian dollars
      * @return the price of the dish in Canadian dollars
      */
-    double getPrice(){
+    public double getPrice(){
         return price;
     }
 
@@ -43,7 +45,7 @@ public class Order {
      * Returns the quantity of the dish
      * @return the number of times the dish was ordered
      */
-     int getQuantity(){
+    public int getQuantity(){
         return quantity;
     }
 
@@ -51,7 +53,17 @@ public class Order {
      * Returns an array of all individuals who ordered this dish
      * @return an array of all individuals who ordered this dish
      */
-    String[] getConsumers(){
+    public String[] getConsumers(){
         return consumers;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", consumers=" + Arrays.toString(consumers) +
+                '}';
     }
 }
