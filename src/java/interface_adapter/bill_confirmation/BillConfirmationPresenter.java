@@ -32,4 +32,9 @@ public class BillConfirmationPresenter implements BillConfirmationOutputBoundary
     public void prepareFailureView(String errorMessage) {
 
     }
+
+    public void displayBillConfirmationView(BillConfirmationOutputData outputData) {
+        Object[][] debtors = outputData.getDebtors();
+
+    }
 }
