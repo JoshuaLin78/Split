@@ -9,19 +9,23 @@ import java.util.List;
 import java.util.Map;
 
 import interface_adapter.bill_input.BillInputController;
+import api.ImageReader;
 import entity.Order;
 import use_cases.bill_input.BillInputInputBoundary;
 import use_cases.bill_input.MockBillInputInteractor;
 
 public class BillInputView extends JFrame {
 
-    private JTextField imageNameField;
-    private JPanel tablePanel;
-    private Map<JTextField, Double> originalPriceMap = new HashMap<>(); // Stores original prices for each priceField
-    private JTextField taxField;
-    private JTextField tipField;
-    private JTextField totalField;
-    private BillInputController billInputController;
+    private final JTextField imageNameField;
+
+    //The variable that holds the extracted text from the uploaded image
+    private String extractedText;
+    private final JPanel tablePanel;
+    private final Map<JTextField, Double> originalPriceMap = new HashMap<>(); // Stores original prices for each priceField
+    private final JTextField taxField;
+    private final JTextField tipField;
+    private final JTextField totalField;
+    private final BillInputController billInputController;
 
     public BillInputView(BillInputController controller) {
         this.billInputController = controller;
@@ -51,8 +55,12 @@ public class BillInputView extends JFrame {
                 JFileChooser fileChooser = new JFileChooser();
                 int option = fileChooser.showOpenDialog(BillInputView.this);
                 if (option == JFileChooser.APPROVE_OPTION) {
-                    String fileName = fileChooser.getSelectedFile().getName();
-                    imageNameField.setText(fileName);
+                    String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                    String imageName = fileChooser.getSelectedFile().getName();
+
+                    String extractedText = ImageReader.processImageFile(filePath);
+
+                    imageNameField.setText(imageName);
                 }
             }
         });
