@@ -1,18 +1,16 @@
 package use_cases.bill_confirmation;
 
 import entity.Debtor;
-import entity.DebtorFactory;
-import entity.Order;
-import interface_adapter.bill_confirmation.BillConfirmationPresenter;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BillConfirmationInteractor implements BillConfirmationInputBoundary {
+    private final BillConfirmationDebtorDataAccessInterface debtorDataAccessInterface;
     private final BillConfirmationOutputBoundary userPresenter;
 
-    public BillConfirmationInteractor(BillConfirmationOutputBoundary billConfirmationOutputData) {
+    public BillConfirmationInteractor(BillConfirmationDebtorDataAccessInterface debtorDataAccessInterface,
+                                      BillConfirmationOutputBoundary billConfirmationOutputData) {
+        this.debtorDataAccessInterface = debtorDataAccessInterface;
         this.userPresenter = billConfirmationOutputData;
     }
 
@@ -31,6 +29,15 @@ public class BillConfirmationInteractor implements BillConfirmationInputBoundary
 //            BillConfirmationOutputData output = new BillConfirmationOutputData(debtorArray);
 //            userPresenter.displayBillConfirmationView(output);
 //        }
+
+        for (Debtor debtor: billConfirmationInputData.getDebtors()){
+            if(debtorDataAccessInterface.existsByName(debtor.getName())){
+                debtorDataAccessInterface.update(debtor);
+            }
+            else{
+                debtorDataAccessInterface.saveNew(debtor);
+            }
+        }
     }
 
     private static Object[][] debtorsToArray(List<Debtor> debtors) {

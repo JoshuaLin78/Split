@@ -1,12 +1,8 @@
 package view;
 
-import entity.Debtor;
-import entity.DebtorFactory;
 import interface_adapter.bill_confirmation.BillConfirmationController;
-import interface_adapter.bill_confirmation.BillConfirmationPresenter;
 import interface_adapter.bill_confirmation.BillConfirmationState;
 import interface_adapter.bill_confirmation.BillConfirmationViewModel;
-import use_cases.bill_confirmation.*;
 
 
 import javax.swing.*;
@@ -17,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BillConfirmationView extends JPanel implements ActionListener, PropertyChangeListener{
     private final String viewName = "Bill Confirmation";
@@ -94,7 +88,7 @@ public class BillConfirmationView extends JPanel implements ActionListener, Prop
     }
 
     public void setBillConfirmationController(BillConfirmationController billConfirmationController) {
-//        this.billConfirmationController = billConfirmationController;
+        this.billConfirmationController = billConfirmationController;
     }
 
     public static void main(String[] args) {

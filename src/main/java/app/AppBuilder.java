@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 
 import javax.swing.*;
 
+import data_access.InMemoryDebtorDataAccessObject;
 import entity.DebtorFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.bill_confirmation.BillConfirmationController;
@@ -32,6 +33,8 @@ public class AppBuilder {
     private final DebtorFactory debtorFactory = new DebtorFactory();
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
+
+    private final InMemoryDebtorDataAccessObject debtorDataAccessObject = new InMemoryDebtorDataAccessObject();
 
     private BillInputView billInputView;
     private BillInputViewModel billInputViewModel;
@@ -78,8 +81,8 @@ public class AppBuilder {
     public AppBuilder addBillConfirmationUseCase() {
         final BillConfirmationOutputBoundary billConfirmationOutputBoundary =
                 new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel);
-        final BillConfirmationInputBoundary billConfirmationInteractor = new BillConfirmationInteractor(
-                billConfirmationOutputBoundary);
+        final BillConfirmationInputBoundary billConfirmationInteractor = new
+                BillConfirmationInteractor(debtorDataAccessObject, billConfirmationOutputBoundary);
 
         final BillConfirmationController controller = new BillConfirmationController(billConfirmationInteractor);
         billConfirmationView.setBillConfirmationController(controller);
