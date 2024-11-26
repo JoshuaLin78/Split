@@ -3,6 +3,8 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,28 +13,36 @@ import java.util.Map;
 import interface_adapter.bill_input.BillInputController;
 import api.ImageReader;
 import entity.Order;
+import interface_adapter.bill_input.BillInputPresenter;
+import interface_adapter.bill_input.BillInputState;
+import interface_adapter.bill_input.BillInputViewModel;
 import use_cases.bill_input.BillInputInputBoundary;
+import use_cases.bill_input.BillInputInteractor;
+import use_cases.bill_input.BillInputOutputBoundary;
 import use_cases.bill_input.MockBillInputInteractor;
 
-public class BillInputView extends JFrame {
+public class BillInputView extends JPanel implements ActionListener, PropertyChangeListener {
+    private final String viewName = "Bill Input";
 
     private final JTextField imageNameField;
-
     //The variable that holds the extracted text from the uploaded image
     private String extractedText;
-    private final JPanel tablePanel;
-    private final Map<JTextField, Double> originalPriceMap = new HashMap<>(); // Stores original prices for each priceField
-    private final JTextField taxField;
-    private final JTextField tipField;
-    private final JTextField totalField;
-    private final BillInputController billInputController;
+    private JPanel tablePanel;
+    private Map<JTextField, Double> originalPriceMap = new HashMap<>(); // Stores original prices for each priceField
+    private JTextField taxField;
+    private JTextField tipField;
+    private JTextField totalField;
 
-    public BillInputView(BillInputController controller) {
-        this.billInputController = controller;
+    private BillInputViewModel billInputViewModel;
+    private BillInputController billInputController;
 
-        setTitle("New Bill Entry");
+    public BillInputView(BillInputViewModel billInputViewModel) {
+        this.billInputViewModel = billInputViewModel;
+        billInputViewModel.addPropertyChangeListener(this);
+
+        //setTitle("New Bill Entry");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
         // header
@@ -177,7 +187,7 @@ public class BillInputView extends JFrame {
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        setVisible(true);
+        //setVisible(true);
     }
 
     private void submitBill() {
@@ -219,6 +229,8 @@ public class BillInputView extends JFrame {
         double tax = Double.parseDouble(taxField.getText());
         double tip = Double.parseDouble(tipField.getText());
         double total = Double.parseDouble(totalField.getText());
+
+        final BillInputState currentState = billInputViewModel.getState();
 
         // call controller's execute
         billInputController.execute(orders, tax, tip, total);
@@ -310,7 +322,7 @@ public class BillInputView extends JFrame {
 
         double tax = parsePercentage(taxField.getText());
         double tip = parsePercentage(tipField.getText());
-        double total = subtotal * (1 + tax / 100) * (1 + tip / 100);
+        double total = subtotal + (subtotal * (tax / 100)) + (subtotal * (tip / 100));
 
         totalField.setText(String.format("%.2f", total));
     }
@@ -337,11 +349,33 @@ public class BillInputView extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        BillInputInputBoundary mockInteractor = new MockBillInputInteractor();
-
-        //just replace mockInteractor with the real one for testing
-        BillInputController controller = new BillInputController(mockInteractor);
-        SwingUtilities.invokeLater(() -> new BillInputView(controller));
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        //not implemented message according to lab
     }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        final BillInputState state = (BillInputState) evt.getNewValue();
+        //some error message according to lab
+    }
+
+    public String getViewName() {
+        return viewName;
+    }
+
+    public void setBillInputController(BillInputController billInputController) {
+        this.billInputController = billInputController;
+    }
+
+//    public static void main(String[] args) {
+//        //BillInputInputBoundary mockInteractor = new MockBillInputInteractor();
+//        BillInputOutputBoundary billInputOutputBoundary = new BillInputPresenter();
+//        BillInputInputBoundary billInputInteractor = new BillInputInteractor(billInputOutputBoundary);
+//
+//        //just replace mockInteractor with the real one for testing
+//        //BillInputController controller = new BillInputController(mockInteractor);
+//        BillInputController controller = new BillInputController(billInputInteractor);
+//        SwingUtilities.invokeLater(() -> new BillInputView(controller));
+//    }
 }

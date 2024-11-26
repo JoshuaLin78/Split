@@ -1,18 +1,18 @@
-package use_cases.bill_input;
+package use_cases.bill_confirmation;
 
 import entity.Debtor;
 import entity.Order;
 
 import java.util.List;
 
-public class BillInputOutputData {
+public class BillConfirmationOutputData {
     private final List<Order> orders;
     private final double tax;
     private final double tip;
     private final double total;
     private final List<Debtor> debtors;
 
-    public BillInputOutputData(List<Order> orders, double tax, double tip, double total, List<Debtor> debtors) {
+    public BillConfirmationOutputData(List<Order> orders, double tax, double tip, double total, List<Debtor> debtors) {
         this.orders = orders;
         this.tax = tax;
         this.tip = tip;
@@ -39,4 +39,7 @@ public class BillInputOutputData {
     public List<Debtor> getDebtors() {
         return debtors;
     }
+
+
 }
+
