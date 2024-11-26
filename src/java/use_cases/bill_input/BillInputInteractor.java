@@ -56,7 +56,8 @@ public class BillInputInteractor implements BillInputInputBoundary {
             debtor.addToTotalDebt(debtor.getCurrDebt());
         }
 
-        final BillInputOutputData billInputOutputData = new BillInputOutputData(debtors);
+        final BillInputOutputData billInputOutputData = new BillInputOutputData(billInputInputData.getOrders(),
+                billInputInputData.getTax(), billInputInputData.getTip(), billInputInputData.getTotal(), debtors);
         userPresenter.prepareSuccessView(billInputOutputData);
     }
 }
