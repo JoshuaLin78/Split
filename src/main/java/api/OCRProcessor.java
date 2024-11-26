@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class OCRProcessor {
 
-    private static final String CREDENTIALS_PATH = "C:\\Users\\joshu\\ornate-antler-441920-i7-bc3c39e86b74.json"; // Replace with your credentials file path
+    private static final String CREDENTIALS_PATH = "C:\\Users\\joshu\\Downloads\\ornate-antler-441920-i7-c1f0d0c573ae.json"; // Replace with your credentials file path
 
     public static String processImage(File file) {
         try {
