@@ -322,7 +322,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
         double tax = parsePercentage(taxField.getText());
         double tip = parsePercentage(tipField.getText());
-        double total = subtotal * (1 + tax / 100) * (1 + tip / 100);
+        double total = subtotal + (subtotal * (tax / 100)) + (subtotal * (tip / 100));
 
         totalField.setText(String.format("%.2f", total));
     }
