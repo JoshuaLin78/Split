@@ -90,7 +90,6 @@ public class BillConfirmationView extends JPanel implements ActionListener, Prop
 
             double subtotal = 0;
 
-
             for (Order order : orders) {
                 for (String consumer : order.getConsumers()) {
                     if (consumer.equals(debtor.getName())) {
