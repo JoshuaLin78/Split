@@ -22,15 +22,15 @@ public class BillConfirmationInteractor implements BillConfirmationInputBoundary
      */
     @Override
     public void execute(BillConfirmationInputData billConfirmationInputData) {
-        List<Debtor> debtors = billConfirmationInputData.getDebtors();
-        if (debtors.isEmpty()) {
-            return;
-            //add error message
-        } else {
-            Object[][] debtorArray = debtorsToArray(debtors);
-            BillConfirmationOutputData output = new BillConfirmationOutputData(debtorArray);
-            userPresenter.displayBillConfirmationView(output);
-        }
+//        List<Debtor> debtors = billConfirmationInputData.getDebtors();
+//        if (debtors.isEmpty()) {
+//            return;
+//            //add error message
+//        } else {
+//            Object[][] debtorArray = debtorsToArray(debtors);
+//            BillConfirmationOutputData output = new BillConfirmationOutputData(debtorArray);
+//            userPresenter.displayBillConfirmationView(output);
+//        }
     }
 
     private static Object[][] debtorsToArray(List<Debtor> debtors) {

@@ -14,8 +14,9 @@ public class BillConfirmationController {
         this.userbillConfirmationUseCaseInteractor = userbillConfirmationUseCaseInteractor;
     }
 
-    public void execute(List<Debtor> debtors){
-        final BillConfirmationInputData billConfirmationInputData = new BillConfirmationInputData(debtors);
+    public void execute(List<Order> orders, double tax, double tip, double total, List<Debtor> debtors){
+        final BillConfirmationInputData billConfirmationInputData = new BillConfirmationInputData(orders, tax, tip,
+                total, debtors);
 
         userbillConfirmationUseCaseInteractor.execute(billConfirmationInputData);
     }

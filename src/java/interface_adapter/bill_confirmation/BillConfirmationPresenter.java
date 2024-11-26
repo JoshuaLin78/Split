@@ -34,7 +34,7 @@ public class BillConfirmationPresenter implements BillConfirmationOutputBoundary
     }
 
     public void displayBillConfirmationView(BillConfirmationOutputData outputData) {
-        Object[][] debtors = outputData.getDebtors();
+        //Object[][] debtors = outputData.getDebtors();
 
     }
 }

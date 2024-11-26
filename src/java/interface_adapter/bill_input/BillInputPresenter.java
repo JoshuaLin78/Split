@@ -25,13 +25,17 @@ public class BillInputPresenter implements BillInputOutputBoundary {
      */
     @Override
     public void prepareSuccessView(BillInputOutputData outputData) {
-//        final BillConfirmationState billConfirmationState = billConfirmationViewModel.getState();
-//        billConfirmationState.setDebtors(outputData.getDebtors());
-//        this.billConfirmationViewModel.setState(billConfirmationState);
-//        billConfirmationViewModel.firePropertyChanged();
-//
-//        viewManagerModel.setState(billConfirmationViewModel.getViewName());
-//        viewManagerModel.firePropertyChanged();
+        final BillConfirmationState billConfirmationState = billConfirmationViewModel.getState();
+        billConfirmationState.setOrders(outputData.getOrders());
+        billConfirmationState.setTax(outputData.getTax());
+        billConfirmationState.setTip(outputData.getTip());
+        billConfirmationState.setTotal(outputData.getTotal());
+        billConfirmationState.setDebtors(outputData.getDebtors());
+        this.billConfirmationViewModel.setState(billConfirmationState);
+        billConfirmationViewModel.firePropertyChanged();
+
+        viewManagerModel.setState(billConfirmationViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 
     /**

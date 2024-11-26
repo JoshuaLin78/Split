@@ -14,7 +14,9 @@ public class Main {
         final AppBuilder appBuilder = new AppBuilder();
         final JFrame application = appBuilder
                                             .addBillInputView()
+                                            .addBillConfirmationView()
                                             .addBillInputUseCase()
+                                            .addBillConfirmationUseCase()
                                             .build();
 
         application.pack();

@@ -20,32 +20,30 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillConfirmationView extends JFrame implements ActionListener, PropertyChangeListener{
+public class BillConfirmationView extends JPanel implements ActionListener, PropertyChangeListener{
     private final String viewName = "Bill Confirmation";
-    private final Object[][] debtorData;
+    //private final Object[][] debtorData;
     private DefaultTableModel tableModel;
 
 
     private BillConfirmationViewModel billConfirmationViewModel;
     private BillConfirmationController billConfirmationController;
 
-    public BillConfirmationView(Object[][] debtorData) {
-//    public BillConfirmationView(
-//            BillConfirmationController billConfirmationViewModel) {
-        this.debtorData = debtorData;
-//        this.billConfirmationViewModel = billConfirmationViewModel;
-//        billConfirmationViewModel.addPropertyChangeListener(this);
+    public BillConfirmationView(BillConfirmationViewModel billConfirmationViewModel) {
+        //this.debtorData = debtorData;
+        this.billConfirmationViewModel = billConfirmationViewModel;
+        billConfirmationViewModel.addPropertyChangeListener(this);
 
-        setTitle(viewName);
+        //setTitle(viewName);
         setSize(800, 600);
 
         String[] columns = new String[]{"Names", "Amount Owed"};
-        this.tableModel = new DefaultTableModel(debtorData, columns);
+        this.tableModel = new DefaultTableModel(null, columns);
 
         JTable table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
 
@@ -58,7 +56,7 @@ public class BillConfirmationView extends JFrame implements ActionListener, Prop
         buttonPanel.add(confirmButton);
         buttonPanel.add(cancelButton);
         add(buttonPanel, BorderLayout.SOUTH);
-        pack();
+        //pack();
         setVisible(true);
     }
 
@@ -79,7 +77,16 @@ public class BillConfirmationView extends JFrame implements ActionListener, Prop
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final BillConfirmationState state = (BillConfirmationState) evt.getNewValue();
-        //some error message according to lab
+
+//        Object[][] debtorData = new Object[state.getDebtors().size()][2];
+//        for (int i = 0; i < state.getDebtors().size(); i++) {
+//            Debtor debtor = state.getDebtors().get(i);
+//            debtorData[i][0] = debtor.getName();
+//            debtorData[i][1] = debtor.getCurrDebt();
+//        }
+//
+//        String[] columns = new String[]{"Names", "Amount Owed"};
+//        this.tableModel = new DefaultTableModel(debtorData, columns);
     }
 
     public String getViewName() {
@@ -104,11 +111,11 @@ public class BillConfirmationView extends JFrame implements ActionListener, Prop
 //        SwingUtilities.invokeLater(() -> new BillConfirmationView(billConfirmationController));
 
 //        //temporary test
-        Object[][] test = {
-                {"A", 10.23},
-                {"B", 12.67},
-                {"C", 2.34}
-        };
-        new BillConfirmationView(test);
+//        Object[][] test = {
+//                {"A", 10.23},
+//                {"B", 12.67},
+//                {"C", 2.34}
+//        };
+//        new BillConfirmationView(test);
     }
 }
