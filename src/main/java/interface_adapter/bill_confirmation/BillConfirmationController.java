@@ -21,8 +21,8 @@ public class BillConfirmationController {
         userbillConfirmationUseCaseInteractor.execute(billConfirmationInputData);
     }
 
-    public void confirmAction(){
+    public void returnToBillInputView(){
+        userbillConfirmationUseCaseInteractor.returnToBillInputView();
     }
 
-    public void cancelAction(){}
 }

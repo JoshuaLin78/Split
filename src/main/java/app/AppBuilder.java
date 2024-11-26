@@ -80,7 +80,7 @@ public class AppBuilder {
 
     public AppBuilder addBillConfirmationUseCase() {
         final BillConfirmationOutputBoundary billConfirmationOutputBoundary =
-                new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel);
+                new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel, billInputViewModel);
         final BillConfirmationInputBoundary billConfirmationInteractor = new
                 BillConfirmationInteractor(debtorDataAccessObject, billConfirmationOutputBoundary);
 

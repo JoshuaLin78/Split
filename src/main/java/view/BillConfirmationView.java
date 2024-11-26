@@ -134,11 +134,14 @@ public class BillConfirmationView extends JPanel implements ActionListener, Prop
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() instanceof JButton button) {
             if ("Confirm".equals(button.getText())) {
-                System.out.println("Confirmed");
-                // Add confirm logic here
+                BillConfirmationState currentState =  billConfirmationViewModel.getState();
+                billConfirmationController.execute(currentState.getOrders(),
+                                                    currentState.getTax(),
+                                                    currentState.getTip(),
+                                                    currentState.getTotal(),
+                                                    currentState.getDebtors());
             } else if ("Cancel".equals(button.getText())) {
-                System.out.println("Cancelled");
-                // Add cancel logic here
+                billConfirmationController.returnToBillInputView();
             }
         }
     }

@@ -7,4 +7,9 @@ public interface BillConfirmationInputBoundary {
      * @param billConfirmationInputData the input data
      */
     void execute(BillConfirmationInputData billConfirmationInputData);
+
+    /**
+     * Executes the return to the bill input view.
+     */
+    void returnToBillInputView();
 }
