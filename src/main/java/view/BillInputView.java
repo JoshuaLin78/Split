@@ -24,6 +24,7 @@ import use_cases.bill_input.MockBillInputInteractor;
 public class BillInputView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "Bill Input";
 
+    private final JTextField imageNameField;
     //The variable that holds the extracted text from the uploaded image
     private String extractedText;
     private JPanel tablePanel;
