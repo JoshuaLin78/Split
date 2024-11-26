@@ -29,14 +29,18 @@ public class Debtor {
     }
 
     /**
-     * Returns the amount of money (in Canadian dollars) the debtor owers the user in the current bill
-     * @return the amount of money (in Canadian dollars) the debtor owers the user in the current bill
+     * Returns the amount of money (in Canadian dollars) the debtor owes the user in the current bill
+     * @return the amount of money (in Canadian dollars) the debtor owes the user in the current bill
      */
     public double getCurrDebt() {
         return currDebt;
     }
 
-    public void addCurrDebt(double debt) {currDebt += debt;}
+    /**
+     * Adds to the amount of money (in Canadian dollars) the debtor owes the user in the current bill
+     * @param debt the amount of money to add
+     */
+    public void addToCurrDebt(double debt) {currDebt += debt;}
 
     /**
      * Returns the total amount of money (in Canadian dollars) the debtor owes the user
@@ -45,6 +49,12 @@ public class Debtor {
     public double getTotalDebt(){
         return totalDebt;
     }
+
+    /**
+     * Adds to the total amount of money (in Canadian dollars) the debtor owes the user
+     * @param debt the amount to add
+     */
+    public void addToTotalDebt(double debt) {totalDebt += debt;}
 
     /**
      * String representation of debtor
