@@ -8,6 +8,7 @@ import java.util.List;
 
 public class BillConfirmationState {
     private List<Order> orders = new ArrayList<>();
+    private double subtotal = 0.0;
     private double tax = 0.0;
     private double tip = 0.0;
     private double total = 0.0;
@@ -19,6 +20,14 @@ public class BillConfirmationState {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
     }
 
     public double getTax() {

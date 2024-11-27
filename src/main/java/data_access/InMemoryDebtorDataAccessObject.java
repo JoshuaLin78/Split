@@ -19,6 +19,7 @@ public class InMemoryDebtorDataAccessObject implements BillInputDebtorDataAccess
 
     @Override
     public void saveNew(Debtor debtor) {
+        debtor.addToTotalDebt(debtor.getCurrDebt());
         debtor.resetCurrDebt();
         debtors.put(debtor.getName(), debtor);
     }
