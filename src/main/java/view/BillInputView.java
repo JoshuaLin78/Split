@@ -5,21 +5,19 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import api.JsonTo2DArray;
+import api.OrganizeText;
 import interface_adapter.bill_input.BillInputController;
 import api.ImageReader;
 import entity.Order;
-import interface_adapter.bill_input.BillInputPresenter;
 import interface_adapter.bill_input.BillInputState;
 import interface_adapter.bill_input.BillInputViewModel;
-import use_cases.bill_input.BillInputInputBoundary;
-import use_cases.bill_input.BillInputInteractor;
-import use_cases.bill_input.BillInputOutputBoundary;
-import use_cases.bill_input.MockBillInputInteractor;
 
 public class BillInputView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "Bill Input";
@@ -69,7 +67,17 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                     String imageName = fileChooser.getSelectedFile().getName();
 
                     String extractedText = ImageReader.processImageFile(filePath);
-
+                    //System.out.println(extractedText);
+                    try {
+                        String organizedText = OrganizeText.callGPT(extractedText);
+                        //System.out.println(organizedText);
+                        String[][] billInformation = JsonTo2DArray.convertJson(organizedText);
+                        for (String[] row : billInformation) {
+                            System.out.println(String.join(", ", row));
+                        }
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     imageNameField.setText(imageName);
                 }
             }
