@@ -25,8 +25,8 @@ public class BillInputInteractor implements BillInputInputBoundary {
         List<Debtor> debtors = new ArrayList<>();
 
         for(Order order: billInputInputData.getOrders()){
-            double pricePerPerson = order.getPrice() / order.getConsumers().length * (1 + billInputInputData.getTax() /
-                    100) * (1 + billInputInputData.getTip() / 100);
+            double pricePerPerson = order.getPrice() * order.getQuantity() / order.getConsumers().length;
+            double pricePerPersonRounded = Math.round(pricePerPerson*Math.pow(10,2))/Math.pow(10,2);
             for(String consumer: order.getConsumers()){
                 if (consumer.equals("Me*")){
                     continue;
@@ -39,12 +39,12 @@ public class BillInputInteractor implements BillInputInputBoundary {
                     }
                 }
                 if (newDebtor) {
-                    debtors.add(debtorFactory.create(consumer, pricePerPerson, 0));
+                    debtors.add(debtorFactory.create(consumer, pricePerPersonRounded, 0));
                 }
                 else {
                     for (Debtor debtor : debtors) {
                         if (debtor.getName().equals(consumer)) {
-                            debtor.addToCurrDebt(pricePerPerson);
+                            debtor.addToCurrDebt(pricePerPersonRounded);
                             break;
                         }
                     }
@@ -53,11 +53,14 @@ public class BillInputInteractor implements BillInputInputBoundary {
         }
 
         for (Debtor debtor : debtors) {
-            debtor.addToTotalDebt(debtor.getCurrDebt());
+            double taxAndTips = debtor.getCurrDebt() * (1 + billInputInputData.getTax() /100) *
+                    (1 + billInputInputData.getTip() /100) - debtor.getCurrDebt();
+            debtor.addToCurrDebt(Math.round(taxAndTips*Math.pow(10,2))/Math.pow(10,2));
         }
 
         final BillInputOutputData billInputOutputData = new BillInputOutputData(billInputInputData.getOrders(),
-                billInputInputData.getTax(), billInputInputData.getTip(), billInputInputData.getTotal(), debtors);
+                billInputInputData.getSubtotal(), billInputInputData.getTax(), billInputInputData.getTip(),
+                billInputInputData.getTotal(), debtors);
         userPresenter.prepareSuccessView(billInputOutputData);
     }
 }

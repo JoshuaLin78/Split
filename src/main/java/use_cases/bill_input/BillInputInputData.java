@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class BillInputInputData {
     private final List<Order> orders;
+    private final double subtotal;
     private final double tax;
     private final double tip;
     private final double total;
@@ -20,8 +21,9 @@ public class BillInputInputData {
      * @param tip the tip percentage of the bill
      * @param total the total price of the bill
      */
-    public BillInputInputData(List<Order> orders, double tax, double tip, double total) {
+    public BillInputInputData(List<Order> orders, double subtotal, double tax, double tip, double total) {
         this.orders = orders;
+        this.subtotal = subtotal;
         this.tax = tax;
         this.tip = tip;
         this.total = total;
@@ -29,6 +31,10 @@ public class BillInputInputData {
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
     }
 
     public double getTax() {

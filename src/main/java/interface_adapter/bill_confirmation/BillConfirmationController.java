@@ -14,15 +14,15 @@ public class BillConfirmationController {
         this.userbillConfirmationUseCaseInteractor = userbillConfirmationUseCaseInteractor;
     }
 
-    public void execute(List<Order> orders, double tax, double tip, double total, List<Debtor> debtors){
-        final BillConfirmationInputData billConfirmationInputData = new BillConfirmationInputData(orders, tax, tip,
-                total, debtors);
+    public void execute(List<Order> orders, double subtotal, double tax, double tip, double total, List<Debtor> debtors){
+        final BillConfirmationInputData billConfirmationInputData = new BillConfirmationInputData(orders, subtotal, tax,
+                tip, total, debtors);
 
         userbillConfirmationUseCaseInteractor.execute(billConfirmationInputData);
     }
 
-    public void confirmAction(){
+    public void returnToBillInputView(){
+        userbillConfirmationUseCaseInteractor.returnToBillInputView();
     }
 
-    public void cancelAction(){}
 }

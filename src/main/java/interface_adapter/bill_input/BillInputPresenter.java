@@ -27,6 +27,7 @@ public class BillInputPresenter implements BillInputOutputBoundary {
     public void prepareSuccessView(BillInputOutputData outputData) {
         final BillConfirmationState billConfirmationState = billConfirmationViewModel.getState();
         billConfirmationState.setOrders(outputData.getOrders());
+        billConfirmationState.setSubtotal(outputData.getSubtotal());
         billConfirmationState.setTax(outputData.getTax());
         billConfirmationState.setTip(outputData.getTip());
         billConfirmationState.setTotal(outputData.getTotal());

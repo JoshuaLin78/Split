@@ -43,6 +43,11 @@ public class Debtor {
     public void addToCurrDebt(double debt) {currDebt += debt;}
 
     /**
+     * Resets the amount of money (in Canadian dollars) the debtor owes the user in the current bill
+     */
+    public void resetCurrDebt() {currDebt = 0;}
+
+    /**
      * Returns the total amount of money (in Canadian dollars) the debtor owes the user
      * @return the total amount of money (in Canadian dollars) the debtor owes the user
      */

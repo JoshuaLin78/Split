@@ -15,8 +15,7 @@ public interface BillConfirmationOutputBoundary {
     void prepareFailureView(String errorMessage);
 
     /**
-     * Prepares the Confirmation view for the BillConfirmation Use Case
-     * @param outputData the data that will be displayed
+     * Returns to Bill Input View for editing.
      */
-    void displayBillConfirmationView(BillConfirmationOutputData outputData);
+    void returnToBillInputView();
 }

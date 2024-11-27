@@ -100,8 +100,8 @@ public class BillConfirmationView extends JPanel implements ActionListener, Prop
                                 ? " (Shared between " + String.join(", ", order.getConsumers()) + ")"
                                 : "";
                         JLabel orderLabel = new JLabel(
-                                String.format("  %s (x%d): $%.2f%s", order.getName(), order.getQuantity(), splitPrice, splitInfo),
-                                SwingConstants.LEFT
+                                String.format("  %s (x%d): $%.2f%s", order.getName(), order.getQuantity(), splitPrice,
+                                        splitInfo), SwingConstants.LEFT
                         );
                         scrollablePanel.add(orderLabel);
 
@@ -112,9 +112,9 @@ public class BillConfirmationView extends JPanel implements ActionListener, Prop
 
 
             JLabel subtotalLabel = new JLabel(String.format("  Subtotal: $%.2f", subtotal), SwingConstants.LEFT);
-            double tax = subtotal * (taxPercent / 100);
-            double tip = subtotal * (tipPercent / 100);
-            double total = subtotal + tax + tip;
+            double tax = 1 + (taxPercent / 100);
+            double tip = 1 + (tipPercent / 100);
+            double total = subtotal * tax * tip;
 
             JLabel totalLabel = new JLabel(String.format("  Total (with Tax & Tip): $%.2f", total), SwingConstants.LEFT);
             subtotalLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -134,11 +134,15 @@ public class BillConfirmationView extends JPanel implements ActionListener, Prop
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() instanceof JButton button) {
             if ("Confirm".equals(button.getText())) {
-                System.out.println("Confirmed");
-                // Add confirm logic here
+                BillConfirmationState currentState =  billConfirmationViewModel.getState();
+                billConfirmationController.execute(currentState.getOrders(),
+                                                    currentState.getSubtotal(),
+                                                    currentState.getTax(),
+                                                    currentState.getTip(),
+                                                    currentState.getTotal(),
+                                                    currentState.getDebtors());
             } else if ("Cancel".equals(button.getText())) {
-                System.out.println("Cancelled");
-                // Add cancel logic here
+                billConfirmationController.returnToBillInputView();
             }
         }
     }
@@ -152,8 +156,9 @@ public class BillConfirmationView extends JPanel implements ActionListener, Prop
             updateScrollablePanel(state.getDebtors(), state.getOrders(), state.getTax(), state.getTip());
 
 
-            taxLabel.setText(String.format("Tax: $%.2f", state.getTotal() * (state.getTax() / 100)));
-            tipLabel.setText(String.format("Tips: $%.2f", state.getTotal() * (state.getTip() / 100)));
+            taxLabel.setText(String.format("Tax: $%.2f", state.getSubtotal() * (state.getTax() / 100)));
+            tipLabel.setText(String.format("Tips: $%.2f", state.getSubtotal() * (1 + (state.getTax() / 100)) *
+                    (state.getTip() / 100)));
             totalLabel.setText(String.format("Grand Total: $%.2f", state.getTotal()));
         }
     }

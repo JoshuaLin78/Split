@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class BillConfirmationInputData {
     private final List<Order> orders;
+    private final double subtotal;
     private final double tax;
     private final double tip;
     private final double total;
@@ -19,8 +20,10 @@ public class BillConfirmationInputData {
      * Constructor
      * @param debtors the list of debtors
      */
-    public BillConfirmationInputData(List<Order> orders, double tax, double tip, double total, List<Debtor> debtors) {
+    public BillConfirmationInputData(List<Order> orders, double subtotal, double tax, double tip, double total,
+                                     List<Debtor> debtors) {
         this.orders = orders;
+        this.subtotal = subtotal;
         this.tax = tax;
         this.tip = tip;
         this.total = total;
@@ -29,6 +32,10 @@ public class BillConfirmationInputData {
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
     }
 
     public double getTax() {
