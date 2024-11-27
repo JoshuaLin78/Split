@@ -194,6 +194,8 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         List<Order> orders = new ArrayList<>();
         boolean invalidInputFound = false;
 
+        double subtotal = 0.0;
+
         for (int i = 5; i < tablePanel.getComponentCount(); i += 5) {  // skips the headers
             JTextField itemField = (JTextField) tablePanel.getComponent(i + 1);
             JTextField priceField = (JTextField) tablePanel.getComponent(i + 2);
@@ -210,6 +212,8 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                 String itemName = itemField.getText();
                 double price = Double.parseDouble(priceField.getText());
                 int quantity = Integer.parseInt(quantityField.getText());
+
+                subtotal += price;
 
                 // split the ordered by text field by commas
                 String[] consumers = orderedByField.getText().split(",\\s*");
@@ -233,7 +237,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         final BillInputState currentState = billInputViewModel.getState();
 
         // call controller's execute
-        billInputController.execute(orders, tax, tip, total);
+        billInputController.execute(orders, subtotal, tax, tip, total);
     }
 
     // add a new row for bill
@@ -322,7 +326,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
         double tax = parsePercentage(taxField.getText());
         double tip = parsePercentage(tipField.getText());
-        double total = subtotal + (subtotal * (tax / 100)) + (subtotal * (tip / 100));
+        double total = subtotal * (1 + (tax / 100)) * (1 + (tip / 100));
 
         totalField.setText(String.format("%.2f", total));
     }

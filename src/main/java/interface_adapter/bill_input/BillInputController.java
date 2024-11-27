@@ -13,8 +13,8 @@ public class BillInputController {
         this.userbillInputUseCaseInteractor = userbillInputUseCaseInteractor;
     }
 
-    public void execute(List<Order> orders, double tax, double tip, double total){
-        final BillInputInputData billInputInputData = new BillInputInputData(orders, tax, tip, total);
+    public void execute(List<Order> orders, double subtotal, double tax, double tip, double total){
+        final BillInputInputData billInputInputData = new BillInputInputData(orders, subtotal, tax, tip, total);
 
         userbillInputUseCaseInteractor.execute(billInputInputData);
     }
