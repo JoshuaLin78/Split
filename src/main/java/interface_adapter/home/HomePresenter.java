@@ -38,6 +38,7 @@ public class HomePresenter implements HomeOutputBoundary{
     @Override
     public void switchToNewBillView() {
         viewManagerModel.setState(billInputViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 
     /**

@@ -130,7 +130,7 @@ public class AppBuilder {
 
         application.add(cardPanel);
 
-        viewManagerModel.setState(billInputView.getViewName());
+        viewManagerModel.setState(homeView.getViewName());
         viewManagerModel.firePropertyChanged();
 
         return application;
