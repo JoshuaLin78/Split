@@ -43,6 +43,8 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
+
+
         // header
         JPanel headerPanel = new JPanel();
         JLabel titleLabel = new JLabel("New Bill Entry");
@@ -66,22 +68,104 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                     String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                     String imageName = fileChooser.getSelectedFile().getName();
 
-                    String extractedText = ImageReader.processImageFile(filePath);
-                    //System.out.println(extractedText);
-                    try {
-                        String organizedText = OrganizeText.callGPT(extractedText);
-                        //System.out.println(organizedText);
-                        String[][] billInformation = JsonTo2DArray.convertJson(organizedText);
-                        for (String[] row : billInformation) {
-                            System.out.println(String.join(", ", row));
+                    // set up the process prompts
+                    JDialog progressDialog = new JDialog((Frame) null, "Processing Image", true);
+                    progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                    progressDialog.setSize(400, 150);
+                    progressDialog.setLocationRelativeTo(BillInputView.this);
+
+                    JPanel progressPanel = new JPanel(new BorderLayout());
+                    JLabel progressLabel = new JLabel("Initializing...");
+                    JProgressBar progressBar = new JProgressBar(0, 100);
+                    progressBar.setValue(0);
+
+                    JButton cancelButton = new JButton("Cancel");
+                    progressPanel.add(progressLabel, BorderLayout.NORTH);
+                    progressPanel.add(progressBar, BorderLayout.CENTER);
+                    progressPanel.add(cancelButton, BorderLayout.SOUTH);
+                    progressDialog.add(progressPanel);
+
+                    // set up swing worker
+                    SwingWorker<Void, String> worker = new SwingWorker<>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            try {
+                                // Step 1: Initialize (10% progress)
+                                publish("Starting image processing...", "10");
+                                Thread.sleep(500); // Simulated delay
+
+                                // Step 2: Process Image (30% progress)
+                                publish("Extracting text using Google Vision...", "30");
+                                String extractedText = ImageReader.processImageFile(filePath);
+                                if (isCancelled()) return null;
+
+                                if (extractedText.startsWith("Error")) {
+                                    throw new IOException("Failed to process image: " + extractedText);
+                                }
+
+                                // Step 3: Organize Text (60% progress)
+                                publish("Organizing text with AI...", "60");
+                                String organizedText = OrganizeText.callGPT(extractedText);
+                                if (isCancelled()) return null;
+
+                                if (organizedText.isEmpty()) {
+                                    throw new IOException("Failed to organize text.");
+                                }
+
+                                // Step 4: Parse to Array (90% progress)
+                                publish("Parsing organized text...", "90");
+                                String[][] billInformation = JsonTo2DArray.convertJson(organizedText);
+                                if (isCancelled()) return null;
+
+                                if (billInformation.length == 0) {
+                                    throw new IOException("No valid bill information found.");
+                                }
+
+                                // Step 5: Update Table (simulate 100% with delay)
+                                publish("Updating table with bill data...", "100");
+                                SwingUtilities.invokeLater(() -> updateTableWithBillData(billInformation));
+                                imageNameField.setText(imageName);
+
+                                // Simulated delay to ensure 100% message is visible
+                                Thread.sleep(1000);
+                            } catch (Exception ex) {
+                                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(BillInputView.this,
+                                        "Error during processing: " + ex.getMessage(),
+                                        "Error",
+                                        JOptionPane.ERROR_MESSAGE));
+                            }
+                            return null;
                         }
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    imageNameField.setText(imageName);
+
+                        @Override
+                        protected void process(List<String> chunks) {
+                            // update progress bar and status message with the latest values
+                            String latestStatus = chunks.get(0); // status
+                            String latestProgress = chunks.get(1); // value of progress bar as a string
+                            progressLabel.setText(latestStatus);
+                            progressBar.setValue(Integer.parseInt(latestProgress));
+                        }
+
+                        @Override
+                        protected void done() {
+                            progressDialog.dispose();
+                            if (isCancelled()) {
+                                JOptionPane.showMessageDialog(BillInputView.this, "Operation was canceled.", "Canceled", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                    };
+
+                    cancelButton.addActionListener(event -> {
+                        worker.cancel(true);
+                        progressDialog.dispose();
+                    });
+
+                    SwingUtilities.invokeLater(() -> progressDialog.setVisible(true));
+                    worker.execute();
                 }
             }
         });
+
 
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -129,19 +213,19 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         add(scrollPane, BorderLayout.CENTER);
 
         // bottom Panel for tax tips, etc.
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Centering the bottom panel
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // centering the bottom panel
 
         // buttons to manage rows
         JButton addRowButton = new JButton("Add Row");
         JButton removeRowButton = new JButton("Remove Row");
 
         addRowButton.setPreferredSize(new Dimension(100, 30));
-        removeRowButton.setPreferredSize(new Dimension(120, 30));  // Increased width for full text display
+        removeRowButton.setPreferredSize(new Dimension(120, 30));  // increased width for full text display
 
         addRowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addRow(tablePanel.getComponentCount() / 5);  // Calculate row number
+                addRow(tablePanel.getComponentCount() / 5);  // calculate row number
                 tablePanel.revalidate();
                 tablePanel.repaint();
                 calculateTotal();
@@ -198,22 +282,111 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         //setVisible(true);
     }
 
+    private void updateTableWithBillData(String[][] billInformation) {
+        int currentRow = 1;
+        int componentsPerRow = 5;
+
+        for (String[] row : billInformation) {
+
+            String dishName = row[0];
+            double basePrice = Double.parseDouble(row[2]);
+            int quantity = Integer.parseInt(row[1]);
+
+            int componentIndex = currentRow * componentsPerRow;
+            if (componentIndex < tablePanel.getComponentCount()) {
+                // fill in fields
+                JTextField itemField = (JTextField) tablePanel.getComponent(componentIndex + 1);
+                JTextField priceField = (JTextField) tablePanel.getComponent(componentIndex + 2);
+                JTextField quantityField = (JTextField) ((JPanel) tablePanel.getComponent(componentIndex + 3)).getComponent(1);
+
+                // names and quantities
+                itemField.setText(dishName);
+                quantityField.setText(String.valueOf(quantity));
+
+                // work with price map
+                double totalPrice = basePrice * quantity;
+                priceField.setText(String.format("%.2f", totalPrice));
+                originalPriceMap.put(priceField, basePrice); // ensure the base price is stored for quantity adjustments
+            } else {
+                // new rows if needed
+                addRow(currentRow);
+                JTextField itemField = (JTextField) tablePanel.getComponent(componentIndex + 1);
+                JTextField priceField = (JTextField) tablePanel.getComponent(componentIndex + 2);
+                JTextField quantityField = (JTextField) ((JPanel) tablePanel.getComponent(componentIndex + 3)).getComponent(1);
+
+
+                itemField.setText(dishName);
+                quantityField.setText(String.valueOf(quantity));
+
+
+                double totalPrice = basePrice * quantity;
+                priceField.setText(String.format("%.2f", totalPrice));
+                originalPriceMap.put(priceField, basePrice); // store the base price for adjustments
+            }
+            currentRow++;
+        }
+
+        // clear extra rows
+        int totalRows = tablePanel.getComponentCount() / componentsPerRow - 1; // total rows in the table
+        for (int row = currentRow; row <= totalRows; row++) {
+            int componentIndex = row * componentsPerRow;
+            JTextField itemField = (JTextField) tablePanel.getComponent(componentIndex + 1);
+            JTextField priceField = (JTextField) tablePanel.getComponent(componentIndex + 2);
+            JTextField quantityField = (JTextField) ((JPanel) tablePanel.getComponent(componentIndex + 3)).getComponent(1);
+
+            itemField.setText("");
+            priceField.setText("");
+            quantityField.setText("");
+            originalPriceMap.remove(priceField);
+        }
+
+        calculateTotal();
+        tablePanel.revalidate();
+        tablePanel.repaint();
+    }
+
+
     private void submitBill() {
         List<Order> orders = new ArrayList<>();
         boolean invalidInputFound = false;
 
         double subtotal = 0.0;
 
-        for (int i = 5; i < tablePanel.getComponentCount(); i += 5) {  // skips the headers
+        for (int i = 5; i < tablePanel.getComponentCount(); i += 5) {
             JTextField itemField = (JTextField) tablePanel.getComponent(i + 1);
             JTextField priceField = (JTextField) tablePanel.getComponent(i + 2);
             JTextField quantityField = (JTextField) ((JPanel) tablePanel.getComponent(i + 3)).getComponent(1);
             JTextField orderedByField = (JTextField) tablePanel.getComponent(i + 4);
 
-            // make sure nothing is empty
-            if (itemField.getText().isEmpty() || priceField.getText().isEmpty() || quantityField.getText().isEmpty()) {
-                invalidInputFound = true;
-                continue;
+            boolean rowInvalid = false;
+
+            // check and highlight empty "Item Name" field
+            if (itemField.getText().isEmpty()) {
+                itemField.setBackground(Color.PINK);
+                rowInvalid = true;
+            } else {
+                itemField.setBackground(Color.WHITE);
+            }
+
+            // check and highlight empty "Price" field
+            if (priceField.getText().isEmpty()) {
+                priceField.setBackground(Color.PINK);
+                rowInvalid = true;
+            } else {
+                priceField.setBackground(Color.WHITE);
+            }
+
+            // check and highlight empty "Ordered By" field
+            if (orderedByField.getText().isEmpty()) {
+                orderedByField.setBackground(Color.PINK);
+                rowInvalid = true;
+            } else {
+                orderedByField.setBackground(Color.WHITE);
+            }
+
+            if (rowInvalid) {
+                invalidInputFound = true; // mark row as invalid
+                continue; // skip this row
             }
 
             try {
@@ -223,30 +396,33 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
                 subtotal += price;
 
-                // split the ordered by text field by commas
+                // split the "Ordered By" text field by commas
                 String[] consumers = orderedByField.getText().split(",\\s*");
 
                 orders.add(new Order(itemName, price / quantity, quantity, consumers));
             } catch (NumberFormatException e) {
                 invalidInputFound = true;
-                continue;
             }
         }
 
-        // warning if user tries to submit bad data
+        // warning if invalid data is found
         if (invalidInputFound) {
-            JOptionPane.showMessageDialog(this, "Some rows have missing or invalid data and were skipped.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Some rows have missing or invalid data. Please fix them before submitting.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
+        // proceed only if all fields are valid
         double tax = Double.parseDouble(taxField.getText());
         double tip = Double.parseDouble(tipField.getText());
         double total = Double.parseDouble(totalField.getText());
 
         final BillInputState currentState = billInputViewModel.getState();
 
-        // call controller's execute
         billInputController.execute(orders, subtotal, tax, tip, total);
     }
+
+
+
 
     // add a new row for bill
     private void addRow(int rowNum) {
@@ -263,21 +439,53 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         priceField.setPreferredSize(new Dimension(100, 25));
         orderedByField.setPreferredSize(new Dimension(100, 25));
 
-        // add a focus listener to update the original price when the user leaves the priceField
         priceField.addFocusListener(new FocusAdapter() {
+            private String previousValue = ""; // to store the previous value of the field
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                // save the current value when the field gains focus
+                previousValue = priceField.getText();
+            }
+
             @Override
             public void focusLost(FocusEvent e) {
-                try {
-                    double enteredPrice = Double.parseDouble(priceField.getText());
-                    if (enteredPrice > 0) {
-                        originalPriceMap.put(priceField, enteredPrice);  // store the original price
-                        quantityField.setText("1");  // reset quantity to 1
+                String currentValue = priceField.getText();
+
+                // only validate if the value has changed
+                if (!currentValue.equals(previousValue)) {
+                    try {
+                        double enteredPrice = Double.parseDouble(currentValue);
+
+                        // check if the price is negative or zero
+                        if (enteredPrice <= 0) {
+                            throw new IllegalArgumentException("Price must be greater than zero.");
+                        }
+
+                        // valid positive price logic
+                        originalPriceMap.put(priceField, enteredPrice); // store the original price
+                        quantityField.setText("1"); // reset quantity to 1
                         updatePrice(priceField, quantityField, enteredPrice); // initial calculation with quantity 1
-                        calculateTotal();  // recalculate total after setting a new price
+                        calculateTotal(); // recalculate total after setting a new price
+
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(
+                                BillInputView.this,
+                                "Please enter a valid numeric price.",
+                                "Invalid Input",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                        priceField.setText(""); // clear the field for a new valid input
+
+                    } catch (IllegalArgumentException ex) {
+                        JOptionPane.showMessageDialog(
+                                BillInputView.this,
+                                ex.getMessage(), // display specific error message for negative or zero price
+                                "Invalid Price",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                        priceField.setText(""); // clear the field for a new valid input
                     }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(BillInputView.this, "Please enter a valid numeric price.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                    priceField.setText(""); // clear the field for a new valid input
                 }
             }
         });
