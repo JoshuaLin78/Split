@@ -10,5 +10,7 @@ public interface WriteOffDebtDebtorDataAccessInterface {
 
     void update(Debtor debtor);
 
+    void writeOffDebt(Debtor debtor, double amount);
+
     Debtor get(String name);
 }

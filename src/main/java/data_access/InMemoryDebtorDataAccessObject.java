@@ -6,9 +6,10 @@ import java.util.Map;
 import entity.Debtor;
 import use_cases.bill_confirmation.BillConfirmationDebtorDataAccessInterface;
 import use_cases.bill_input.BillInputDebtorDataAccessInterface;
+import use_cases.write_off_debt.WriteOffDebtDebtorDataAccessInterface;
 
 public class InMemoryDebtorDataAccessObject implements BillInputDebtorDataAccessInterface,
-        BillConfirmationDebtorDataAccessInterface {
+        BillConfirmationDebtorDataAccessInterface, WriteOffDebtDebtorDataAccessInterface {
     private final Map<String, Debtor> debtors = new HashMap<>();
 
 
@@ -28,6 +29,11 @@ public class InMemoryDebtorDataAccessObject implements BillInputDebtorDataAccess
     public void update(Debtor debtor) {
         debtors.get(debtor.getName()).addToTotalDebt(debtor.getCurrDebt());
         debtors.get(debtor.getName()).resetCurrDebt();
+    }
+
+    @Override
+    public void writeOffDebt(Debtor debtor, double amount) {
+        debtors.get(debtor.getName()).writeOffDebt(amount);
     }
 
     @Override

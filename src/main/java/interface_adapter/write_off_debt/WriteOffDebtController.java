@@ -14,9 +14,8 @@ public class WriteOffDebtController {
         this.userWriteOffDebtUseCaseInteractor = userWriteOffDebtUseCaseInteractor;
     }
 
-    public void execute(List<Order> orders, double subtotal, double tax, double tip, double total, List<Debtor> debtors){
-        final WriteOffDebtInputData writeOffDebtInputData = new WriteOffDebtInputData(orders, subtotal, tax,
-                tip, total, debtors);
+    public void execute(Debtor debtor, double amount) {
+        final WriteOffDebtInputData writeOffDebtInputData = new WriteOffDebtInputData(debtor, amount);
 
         userWriteOffDebtUseCaseInteractor.execute(writeOffDebtInputData);
     }

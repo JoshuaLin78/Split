@@ -62,6 +62,14 @@ public class Debtor {
     public void addToTotalDebt(double debt) {totalDebt += debt;}
 
     /**
+     * Writes off debt from the debtor
+     * @param amount the amount of debt to write off
+     */
+    public void writeOffDebt(double amount) {
+        totalDebt -= amount;
+    }
+
+    /**
      * String representation of debtor
      * @return the name of the debtor
      */
