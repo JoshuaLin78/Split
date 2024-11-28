@@ -13,14 +13,21 @@ import interface_adapter.bill_confirmation.BillConfirmationViewModel;
 import interface_adapter.bill_input.BillInputController;
 import interface_adapter.bill_input.BillInputPresenter;
 import interface_adapter.bill_input.BillInputViewModel;
+import interface_adapter.home.HomeController;
+import interface_adapter.home.HomePresenter;
+import interface_adapter.home.HomeViewModel;
 import use_cases.bill_confirmation.BillConfirmationInputBoundary;
 import use_cases.bill_confirmation.BillConfirmationInteractor;
 import use_cases.bill_confirmation.BillConfirmationOutputBoundary;
 import use_cases.bill_input.BillInputInputBoundary;
 import use_cases.bill_input.BillInputInteractor;
 import use_cases.bill_input.BillInputOutputBoundary;
+import use_cases.home.HomeInputBoundary;
+import use_cases.home.HomeInteractor;
+import use_cases.home.HomeOutputBoundary;
 import view.BillConfirmationView;
 import view.BillInputView;
+import view.HomeView;
 import view.ViewManager;
 
 /**
@@ -36,6 +43,8 @@ public class AppBuilder {
 
     private final InMemoryDebtorDataAccessObject debtorDataAccessObject = new InMemoryDebtorDataAccessObject();
 
+    private HomeView homeView;
+    private HomeViewModel homeViewModel;
     private BillInputView billInputView;
     private BillInputViewModel billInputViewModel;
     private BillConfirmationView billConfirmationView;
@@ -46,6 +55,17 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the HomeView to the application
+     * @return this builder
+     */
+    public AppBuilder addHomeView(){
+        homeViewModel = new HomeViewModel();
+        homeView = new HomeView(homeViewModel);
+        cardPanel.add(homeView, homeView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the BillInputView to the application
      * @return this builder
      */
@@ -53,6 +73,16 @@ public class AppBuilder {
         billInputViewModel = new BillInputViewModel();
         billInputView = new BillInputView(billInputViewModel);
         cardPanel.add(billInputView, billInputView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addHomeUseCase() {
+        final HomeOutputBoundary homeOutputBoundary = new HomePresenter(viewManagerModel,
+                homeViewModel, billInputViewModel);
+        final HomeInputBoundary homeInteractor = new HomeInteractor(homeOutputBoundary);
+
+        final HomeController controller = new HomeController(homeInteractor);
+        homeView.setHomeController(controller);
         return this;
     }
 
