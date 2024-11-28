@@ -16,9 +16,11 @@ public class Main {
                                             .addHomeView()
                                             .addBillInputView()
                                             .addBillConfirmationView()
+                                            .addCheckDebtorsView()
                                             .addHomeUseCase()
                                             .addBillInputUseCase()
                                             .addBillConfirmationUseCase()
+                                            .addCheckDebtorsUseCase()
                                             .build();
 
         application.pack();

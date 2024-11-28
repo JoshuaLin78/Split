@@ -13,6 +13,9 @@ import interface_adapter.bill_confirmation.BillConfirmationViewModel;
 import interface_adapter.bill_input.BillInputController;
 import interface_adapter.bill_input.BillInputPresenter;
 import interface_adapter.bill_input.BillInputViewModel;
+import interface_adapter.check_debtors.CheckDebtorsController;
+import interface_adapter.check_debtors.CheckDebtorsPresenter;
+import interface_adapter.check_debtors.CheckDebtorsViewModel;
 import interface_adapter.home.HomeController;
 import interface_adapter.home.HomePresenter;
 import interface_adapter.home.HomeViewModel;
@@ -22,11 +25,14 @@ import use_cases.bill_confirmation.BillConfirmationOutputBoundary;
 import use_cases.bill_input.BillInputInputBoundary;
 import use_cases.bill_input.BillInputInteractor;
 import use_cases.bill_input.BillInputOutputBoundary;
+import use_cases.check_debtors.CheckDebtorsInteractor;
+import use_cases.check_debtors.CheckDebtorsOutputBoundary;
 import use_cases.home.HomeInputBoundary;
 import use_cases.home.HomeInteractor;
 import use_cases.home.HomeOutputBoundary;
 import view.BillConfirmationView;
 import view.BillInputView;
+import view.CheckDebtorsView;
 import view.HomeView;
 import view.ViewManager;
 
@@ -49,6 +55,8 @@ public class AppBuilder {
     private BillInputViewModel billInputViewModel;
     private BillConfirmationView billConfirmationView;
     private BillConfirmationViewModel billConfirmationViewModel;
+    private CheckDebtorsView checkDebtorsView;
+    private CheckDebtorsViewModel checkDebtorsViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -78,7 +86,7 @@ public class AppBuilder {
 
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(viewManagerModel,
-                homeViewModel, billInputViewModel);
+                homeViewModel, billInputViewModel, checkDebtorsViewModel);
         final HomeInputBoundary homeInteractor = new HomeInteractor(homeOutputBoundary);
 
         final HomeController controller = new HomeController(homeInteractor);
@@ -116,6 +124,28 @@ public class AppBuilder {
 
         final BillConfirmationController controller = new BillConfirmationController(billConfirmationInteractor);
         billConfirmationView.setBillConfirmationController(controller);
+        return this;
+    }
+
+    /**
+     * Adds the CheckDebtorsView to the application
+     * @return this builder
+     */
+    public AppBuilder addCheckDebtorsView(){
+        checkDebtorsViewModel = new CheckDebtorsViewModel();
+        checkDebtorsView = new CheckDebtorsView(checkDebtorsViewModel);
+        cardPanel.add(checkDebtorsView, checkDebtorsView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addCheckDebtorsUseCase() {
+        final CheckDebtorsOutputBoundary checkDebtorsOutputBoundary =
+                new CheckDebtorsPresenter(viewManagerModel, checkDebtorsViewModel, homeViewModel);
+        final CheckDebtorsInteractor checkDebtorsInteractor = new
+                CheckDebtorsInteractor(checkDebtorsOutputBoundary);
+
+        final CheckDebtorsController controller = new CheckDebtorsController(checkDebtorsInteractor);
+        checkDebtorsView.setCheckDebtorsController(controller);
         return this;
     }
 

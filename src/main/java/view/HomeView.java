@@ -64,14 +64,14 @@ public class HomeView extends JPanel implements ActionListener, PropertyChangeLi
         viewHistoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                homeController.switchToDebtorsView();
+                homeController.switchToHistoryView();
             }
         });
 
         viewDebtorsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                homeController.switchToHistoryView();
+                homeController.switchToDebtorsView();
             }
         });
 
