@@ -13,14 +13,20 @@ import interface_adapter.bill_confirmation.BillConfirmationViewModel;
 import interface_adapter.bill_input.BillInputController;
 import interface_adapter.bill_input.BillInputPresenter;
 import interface_adapter.bill_input.BillInputViewModel;
+import interface_adapter.check_debtors.CheckDebtorsController;
+import interface_adapter.check_debtors.CheckDebtorsPresenter;
+import interface_adapter.check_debtors.CheckDebtorsViewModel;
 import use_cases.bill_confirmation.BillConfirmationInputBoundary;
 import use_cases.bill_confirmation.BillConfirmationInteractor;
 import use_cases.bill_confirmation.BillConfirmationOutputBoundary;
 import use_cases.bill_input.BillInputInputBoundary;
 import use_cases.bill_input.BillInputInteractor;
 import use_cases.bill_input.BillInputOutputBoundary;
+import use_cases.check_debtors.CheckDebtorsInteractor;
+import use_cases.check_debtors.CheckDebtorsOutputBoundary;
 import view.BillConfirmationView;
 import view.BillInputView;
+import view.CheckDebtorsView;
 import view.ViewManager;
 
 /**
@@ -40,6 +46,8 @@ public class AppBuilder {
     private BillInputViewModel billInputViewModel;
     private BillConfirmationView billConfirmationView;
     private BillConfirmationViewModel billConfirmationViewModel;
+    private CheckDebtorsView checkDebtorsView;
+    private CheckDebtorsViewModel checkDebtorsViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -86,6 +94,28 @@ public class AppBuilder {
 
         final BillConfirmationController controller = new BillConfirmationController(billConfirmationInteractor);
         billConfirmationView.setBillConfirmationController(controller);
+        return this;
+    }
+
+    /**
+     * Adds the CheckDebtorsView to the application
+     * @return this builder
+     */
+    public AppBuilder addCheckDebtorsView(){
+        checkDebtorsViewModel = new CheckDebtorsViewModel();
+        checkDebtorsView = new CheckDebtorsView(checkDebtorsViewModel);
+        cardPanel.add(checkDebtorsView, checkDebtorsView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addCheckDebtorsUseCase() {
+        final CheckDebtorsOutputBoundary checkDebtorsOutputBoundary =
+                new CheckDebtorsPresenter(viewManagerModel, checkDebtorsViewModel, billInputViewModel);
+        final CheckDebtorsInteractor checkDebtorsInteractor = new
+                CheckDebtorsInteractor(checkDebtorsOutputBoundary);
+
+        final CheckDebtorsController controller = new CheckDebtorsController(checkDebtorsInteractor);
+        checkDebtorsView.setCheckDebtorsController(controller);
         return this;
     }
 

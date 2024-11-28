@@ -17,6 +17,8 @@ public class Main {
                                             .addBillConfirmationView()
                                             .addBillInputUseCase()
                                             .addBillConfirmationUseCase()
+                                            .addCheckDebtorsView()
+                                            .addCheckDebtorsUseCase()
                                             .build();
 
         application.pack();
