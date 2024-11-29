@@ -1,6 +1,8 @@
 package data_access;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import entity.Debtor;
@@ -39,5 +41,10 @@ public class InMemoryDebtorDataAccessObject implements BillInputDebtorDataAccess
     @Override
     public Debtor get(String name) {
         return debtors.get(name);
+    }
+
+    @Override
+    public List<Debtor> getAll() {
+        return new ArrayList<>(debtors.values());
     }
 }

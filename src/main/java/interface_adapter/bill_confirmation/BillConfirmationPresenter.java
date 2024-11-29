@@ -33,7 +33,7 @@ public class BillConfirmationPresenter implements BillConfirmationOutputBoundary
     @Override
     public void prepareSuccessView(BillConfirmationOutputData outputData) {
         final CheckDebtorsState checkDebtorsState = checkDebtorsViewModel.getState();
-        checkDebtorsState.setDebtors(outputData.getDebtors());
+        checkDebtorsState.setDebtors(outputData.getAllDebtors());
         this.checkDebtorsViewModel.setState(checkDebtorsState);
         checkDebtorsViewModel.firePropertyChanged();
 

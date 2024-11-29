@@ -76,7 +76,6 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
         scrollablePanel.removeAll();
         double totalDebt = 0.00;
         for (Debtor debtor : debtors) {
-
             JLabel nameLabel = new JLabel(debtor.getName(), SwingConstants.LEFT);
             nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
             scrollablePanel.add(nameLabel);
@@ -84,12 +83,11 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
             double debt = debtor.getTotalDebt();
             totalDebt += debt;
 
-            JLabel debtLabel = new JLabel(
-                    String.format("$%.2f%s", debt, SwingConstants.LEFT));
+            JLabel debtLabel = new JLabel(String.format("$%.2f", debt), SwingConstants.LEFT);
             scrollablePanel.add(debtLabel);
         }
 
-        JLabel totalLabel = new JLabel(String.format("  Total Owed): $%.2f", totalDebt), SwingConstants.LEFT);
+        JLabel totalLabel = new JLabel(String.format("Total Owed: $%.2f", totalDebt), SwingConstants.LEFT);
         totalLabel.setFont(new Font("Arial", Font.BOLD, 14));
         scrollablePanel.add(totalLabel);
         scrollablePanel.add(new JSeparator(SwingConstants.HORIZONTAL));

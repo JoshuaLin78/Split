@@ -34,7 +34,8 @@ public class BillConfirmationInteractor implements BillConfirmationInputBoundary
                                                                             billConfirmationInputData.getTax(),
                                                                             billConfirmationInputData.getTip(),
                                                                             billConfirmationInputData.getTotal(),
-                                                                            billConfirmationInputData.getDebtors());
+                                                                            billConfirmationInputData.getDebtors(),
+                                                                            debtorDataAccessInterface.getAll());
         userPresenter.prepareSuccessView(billConfirmationOutputData);
     }
 
