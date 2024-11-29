@@ -315,68 +315,71 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
     }
 
     private void updateTableWithBillData(String[][] billInformation) {
+        // Clear all components in the panel and reset the price map
+        tablePanel.removeAll();
+        originalPriceMap.clear();
+
+        // Rebuild the table with the new bill information
         int currentRow = 1;
-        int componentsPerRow = 5;
-
         for (String[] row : billInformation) {
-
             String dishName = row[0];
             double basePrice = Double.parseDouble(row[2]);
             int quantity = Integer.parseInt(row[1]);
 
-            int componentIndex = currentRow * componentsPerRow;
-            if (componentIndex < tablePanel.getComponentCount()) {
-                // fill in fields
-                JTextField itemField = (JTextField) tablePanel.getComponent(componentIndex + 1);
-                JTextField priceField = (JTextField) tablePanel.getComponent(componentIndex + 2);
-                JTextField quantityField = (JTextField) ((JPanel) tablePanel.getComponent(componentIndex + 3)).getComponent(1);
+            // Create components for this row
+            JLabel rowNumberLabel = new JLabel(String.valueOf(currentRow), SwingConstants.CENTER);
+            JTextField itemField = new JTextField(dishName);
+            JTextField priceField = new JTextField(String.format("%.2f", basePrice * quantity));
+            JTextField quantityField = new JTextField(String.valueOf(quantity));
+            JTextField orderedByField = new JTextField(); // Create a new "Ordered By" field
 
-                // names and quantities
-                itemField.setText(dishName);
-                quantityField.setText(String.valueOf(quantity));
+            // Set up quantity controls (if applicable)
+            JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+            JButton increaseButton = new JButton("+");
+            JButton decreaseButton = new JButton("-");
+            quantityPanel.add(decreaseButton);
+            quantityPanel.add(quantityField);
+            quantityPanel.add(increaseButton);
 
-                // work with price map
-                double totalPrice = basePrice * quantity;
-                priceField.setText(String.format("%.2f", totalPrice));
-                originalPriceMap.put(priceField, basePrice); // ensure the base price is stored for quantity adjustments
-            } else {
-                // new rows if needed
-                addRow(currentRow);
-                JTextField itemField = (JTextField) tablePanel.getComponent(componentIndex + 1);
-                JTextField priceField = (JTextField) tablePanel.getComponent(componentIndex + 2);
-                JTextField quantityField = (JTextField) ((JPanel) tablePanel.getComponent(componentIndex + 3)).getComponent(1);
+            // Add listeners for quantity buttons
+            increaseButton.addActionListener(e -> updateQuantity(quantityField, priceField, basePrice, 1));
+            decreaseButton.addActionListener(e -> updateQuantity(quantityField, priceField, basePrice, -1));
 
+            // Add components to the panel
+            tablePanel.add(rowNumberLabel);
+            tablePanel.add(itemField);
+            tablePanel.add(priceField);
+            tablePanel.add(quantityPanel);
+            tablePanel.add(orderedByField);
 
-                itemField.setText(dishName);
-                quantityField.setText(String.valueOf(quantity));
-
-
-                double totalPrice = basePrice * quantity;
-                priceField.setText(String.format("%.2f", totalPrice));
-                originalPriceMap.put(priceField, basePrice); // store the base price for adjustments
-            }
+            // Store the base price for recalculations
+            originalPriceMap.put(priceField, basePrice);
             currentRow++;
         }
 
-        // clear extra rows
-        int totalRows = tablePanel.getComponentCount() / componentsPerRow - 1; // total rows in the table
-        for (int row = currentRow; row <= totalRows; row++) {
-            int componentIndex = row * componentsPerRow;
-            JTextField itemField = (JTextField) tablePanel.getComponent(componentIndex + 1);
-            JTextField priceField = (JTextField) tablePanel.getComponent(componentIndex + 2);
-            JTextField quantityField = (JTextField) ((JPanel) tablePanel.getComponent(componentIndex + 3)).getComponent(1);
-
-            itemField.setText("");
-            priceField.setText("");
-            quantityField.setText("");
-            originalPriceMap.remove(priceField);
-        }
-
-        calculateTotal();
+        // Refresh the panel to show new data
         tablePanel.revalidate();
         tablePanel.repaint();
+
+        // Recalculate totals based on the new data
+        calculateTotal();
     }
 
+
+    // Helper method to update quantity
+    private void updateQuantity(JTextField quantityField, JTextField priceField, double basePrice, int delta) {
+        try {
+            int quantity = Integer.parseInt(quantityField.getText()) + delta;
+            if (quantity > 0) {
+                quantityField.setText(String.valueOf(quantity));
+                priceField.setText(String.format("%.2f", basePrice * quantity));
+                calculateTotal();
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid input gracefully
+            JOptionPane.showMessageDialog(null, "Invalid quantity input.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     private void submitBill() {
         List<Order> orders = new ArrayList<>();
