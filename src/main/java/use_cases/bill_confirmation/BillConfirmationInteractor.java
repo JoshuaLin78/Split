@@ -28,6 +28,14 @@ public class BillConfirmationInteractor implements BillConfirmationInputBoundary
                 debtorDataAccessInterface.saveNew(debtor);
             }
         }
+
+        final BillConfirmationOutputData billConfirmationOutputData = new BillConfirmationOutputData(
+                                                                            billConfirmationInputData.getOrders(),
+                                                                            billConfirmationInputData.getTax(),
+                                                                            billConfirmationInputData.getTip(),
+                                                                            billConfirmationInputData.getTotal(),
+                                                                            billConfirmationInputData.getDebtors());
+        userPresenter.prepareSuccessView(billConfirmationOutputData);
     }
 
     /**

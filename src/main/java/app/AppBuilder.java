@@ -118,7 +118,8 @@ public class AppBuilder {
 
     public AppBuilder addBillConfirmationUseCase() {
         final BillConfirmationOutputBoundary billConfirmationOutputBoundary =
-                new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel, billInputViewModel);
+                new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel, homeViewModel,
+                        checkDebtorsViewModel, billInputViewModel);
         final BillConfirmationInputBoundary billConfirmationInteractor = new
                 BillConfirmationInteractor(debtorDataAccessObject, billConfirmationOutputBoundary);
 
