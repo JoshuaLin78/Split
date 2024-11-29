@@ -13,10 +13,14 @@ public class Main {
     public static void main(String[] args) {
         final AppBuilder appBuilder = new AppBuilder();
         final JFrame application = appBuilder
+                                            .addHomeView()
                                             .addBillInputView()
                                             .addBillConfirmationView()
+                                            .addCheckDebtorsView()
+                                            .addHomeUseCase()
                                             .addBillInputUseCase()
                                             .addBillConfirmationUseCase()
+                                            .addCheckDebtorsUseCase()
                                             .build();
 
         application.pack();

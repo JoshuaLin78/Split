@@ -10,14 +10,17 @@ public class BillConfirmationOutputData {
     private final double tax;
     private final double tip;
     private final double total;
-    private final List<Debtor> debtors;
+    private final List<Debtor> billDebtors;
+    private final List<Debtor> allDebtors;
 
-    public BillConfirmationOutputData(List<Order> orders, double tax, double tip, double total, List<Debtor> debtors) {
+    public BillConfirmationOutputData(List<Order> orders, double tax, double tip, double total,
+                                      List<Debtor> billDebtors, List<Debtor> allDebtors) {
         this.orders = orders;
         this.tax = tax;
         this.tip = tip;
         this.total = total;
-        this.debtors = debtors;
+        this.billDebtors = billDebtors;
+        this.allDebtors = allDebtors;
     }
 
     public List<Order> getOrders() {
@@ -36,10 +39,12 @@ public class BillConfirmationOutputData {
         return total;
     }
 
-    public List<Debtor> getDebtors() {
-        return debtors;
+    public List<Debtor> getBillDebtors() {
+        return billDebtors;
     }
 
-
+    public List<Debtor> getAllDebtors() {
+        return allDebtors;
+    }
 }
 
