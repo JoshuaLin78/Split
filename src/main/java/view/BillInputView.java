@@ -53,6 +53,36 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         add(headerPanel, BorderLayout.NORTH);
 
         // buttons
+        JButton clearButton = new JButton("Clear Bill");
+
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(
+                        BillInputView.this,
+                        "Are you sure you want to clear the bill? This action cannot be undone.",
+                        "Confirm Clear Bill",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+                if (result == JOptionPane.YES_OPTION) {
+                    clearBillTable(); // Clear the table if the user confirms
+                }
+            }
+        });
+
+        JButton doneButton = new JButton("Return Home");
+        doneButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JPanel parent = (JPanel) BillInputView.this.getParent();
+                CardLayout layout = (CardLayout) parent.getLayout();
+                layout.show(parent, "Home");
+            }
+        });
+
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton uploadButton = new JButton("Upload Photo");
         imageNameField = new JTextField(15);
@@ -174,9 +204,11 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
             }
         });
 
+        buttonsPanel.add(doneButton);
         buttonsPanel.add(uploadButton);
         buttonsPanel.add(imageNameField);
         buttonsPanel.add(submitButton);
+        buttonsPanel.add(clearButton);
         add(buttonsPanel, BorderLayout.NORTH);
 
         // create the bill table
@@ -421,7 +453,33 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         billInputController.execute(orders, subtotal, tax, tip, total);
     }
 
+    private void clearBillTable() {
+        int componentsPerRow = 5;
 
+        for (Component component : tablePanel.getComponents()) {
+
+            if (component instanceof JTextField) {
+                JTextField textField = (JTextField) component;
+
+                textField.setText("");
+            }
+            if (component instanceof JPanel) {
+                JPanel panel = (JPanel) component;
+                for (Component subComponent : panel.getComponents()) {
+                    if (subComponent instanceof JTextField) {
+                        JTextField textField = (JTextField) subComponent;
+
+                        textField.setText("1");
+                    }
+                }
+            }
+        }
+
+        originalPriceMap.clear();
+        calculateTotal();
+        tablePanel.revalidate();
+        tablePanel.repaint();
+    }
 
 
     // add a new row for bill
