@@ -18,5 +18,13 @@ public class CheckDebtorsState {
     public String toString() {
         return ("CheckDebtorsState");
     }
+
+    public double getTotal() {
+        double total = 0.00;
+        for (Debtor debtor : debtors) {
+            total += debtor.getTotalDebt();
+        }
+        return total;
+    }
 }
 

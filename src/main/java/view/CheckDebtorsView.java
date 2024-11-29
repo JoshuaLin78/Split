@@ -35,7 +35,7 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
         setSize(800, 600);
 
 
-        JLabel titleLabel = new JLabel("Check Debtors", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("View Debtors", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         add(titleLabel, BorderLayout.NORTH);
 
@@ -74,22 +74,17 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
 
     private void updateScrollablePanel(List<Debtor> debtors) {
         scrollablePanel.removeAll();
-        double totalDebt = 0.00;
         for (Debtor debtor : debtors) {
             JLabel nameLabel = new JLabel(debtor.getName(), SwingConstants.LEFT);
             nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
             scrollablePanel.add(nameLabel);
 
             double debt = debtor.getTotalDebt();
-            totalDebt += debt;
 
             JLabel debtLabel = new JLabel(String.format("$%.2f", debt), SwingConstants.LEFT);
             scrollablePanel.add(debtLabel);
         }
 
-        JLabel totalLabel = new JLabel(String.format("Total Owed: $%.2f", totalDebt), SwingConstants.LEFT);
-        totalLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        scrollablePanel.add(totalLabel);
         scrollablePanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
         scrollablePanel.revalidate();
@@ -107,6 +102,7 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
     public void propertyChange(PropertyChangeEvent evt) {
         CheckDebtorsState state = (CheckDebtorsState) evt.getNewValue();
         updateScrollablePanel(state.getDebtors());
+        totalLabel.setText(String.format("Total Owed: $%.2f", state.getTotal()));
     }
 
     public String getViewName() {
