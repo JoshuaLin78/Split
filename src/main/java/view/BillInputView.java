@@ -236,7 +236,10 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
         // start with 5 rows by default
         for (int i = 1; i <= 5; i++) {
-            addRow(i);
+            if (i == 1){
+                addRow(i, true);
+            }
+            addRow(i, false);
         }
 
         // adds tablePanel to a scroll pane and center it
@@ -257,7 +260,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         addRowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addRow(tablePanel.getComponentCount() / 5);  // calculate row number
+                addRow(tablePanel.getComponentCount() / 5, false);  // calculate row number
                 tablePanel.revalidate();
                 tablePanel.repaint();
                 calculateTotal();
@@ -486,11 +489,12 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
 
     // add a new row for bill
-    private void addRow(int rowNum) {
+    private void addRow(int rowNum, boolean greyText) {
         JLabel rowNumberLabel = new JLabel(String.valueOf(rowNum), SwingConstants.CENTER);
         JTextField itemField = new JTextField();
         JTextField priceField = new JTextField();
         JTextField orderedByField = new JTextField();
+
         JTextField quantityField = new JTextField("1");  // default quantity to 1
         JButton increaseQuantityButton = new JButton("+");
         JButton decreaseQuantityButton = new JButton("-");
@@ -499,6 +503,28 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         itemField.setPreferredSize(new Dimension(100, 25));
         priceField.setPreferredSize(new Dimension(100, 25));
         orderedByField.setPreferredSize(new Dimension(100, 25));
+
+        if (greyText) {
+            orderedByField.setText("Enter 'Me' for items ordered by you");
+            orderedByField.setForeground(Color.GRAY);
+            orderedByField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if (orderedByField.getText().equals("Enter 'Me' for items ordered by you")) {
+                        orderedByField.setText("");
+                        orderedByField.setForeground(Color.BLACK); // Set color to black when typing
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if (orderedByField.getText().isEmpty()) {
+                        orderedByField.setText("Enter 'Me' for items ordered by you");
+                        orderedByField.setForeground(Color.GRAY); // Reset to grey if empty
+                    }
+                }
+            }
+        );}
 
         priceField.addFocusListener(new FocusAdapter() {
             private String previousValue = ""; // to store the previous value of the field
