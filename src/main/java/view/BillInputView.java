@@ -464,6 +464,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
         double subtotal = 0.0;
 
+
         for (int i = 5; i < tablePanel.getComponentCount(); i += 5) {
             JTextField itemField = (JTextField) tablePanel.getComponent(i + 1);
             JTextField priceField = (JTextField) tablePanel.getComponent(i + 2);
