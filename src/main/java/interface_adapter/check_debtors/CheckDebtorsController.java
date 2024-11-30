@@ -1,13 +1,13 @@
 package interface_adapter.check_debtors;
 
-import use_cases.check_debtors.CheckDebtorsInteractor;
+import use_cases.check_debtors.CheckDebtorsInputBoundary;
 
 public class CheckDebtorsController {
-    public final CheckDebtorsInteractor checkDebtorsInteractor;
+    public final CheckDebtorsInputBoundary userCheckDebtorsUseCaseInteractor;
 
-    public CheckDebtorsController(CheckDebtorsInteractor checkDebtorsInteractor){
-        this.checkDebtorsInteractor = checkDebtorsInteractor;
+    public CheckDebtorsController(CheckDebtorsInputBoundary userCheckDebtorsUseCaseInteractor){
+        this.userCheckDebtorsUseCaseInteractor = userCheckDebtorsUseCaseInteractor;
     }
 
-    public void switchView(){checkDebtorsInteractor.switchView();}
+    public void switchView(){userCheckDebtorsUseCaseInteractor.switchView();}
 }

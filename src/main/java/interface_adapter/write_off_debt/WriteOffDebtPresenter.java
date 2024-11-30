@@ -1,19 +1,18 @@
 package interface_adapter.write_off_debt;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.bill_input.BillInputViewModel;
+import interface_adapter.check_debtors.CheckDebtorsState;
+import interface_adapter.check_debtors.CheckDebtorsViewModel;
 import use_cases.write_off_debt.WriteOffDebtOutputBoundary;
 import use_cases.write_off_debt.WriteOffDebtOutputData;
 
 public class WriteOffDebtPresenter implements WriteOffDebtOutputBoundary{
-    private final WriteOffDebtViewModel writeOffDebtViewModel;
+    private final CheckDebtorsViewModel checkDebtorsViewModel;
     private final ViewManagerModel viewManagerModel;
-    private final BillInputViewModel billInputViewModel;
 
-    public WriteOffDebtPresenter(ViewManagerModel viewManagerModel, WriteOffDebtViewModel writeOffDebtViewModel, BillInputViewModel billInputViewModel) {
-        this.writeOffDebtViewModel = writeOffDebtViewModel;
+    public WriteOffDebtPresenter(ViewManagerModel viewManagerModel, CheckDebtorsViewModel checkDebtorsViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.billInputViewModel = billInputViewModel;
+        this.checkDebtorsViewModel = checkDebtorsViewModel;
     }
 
     /**
@@ -22,7 +21,10 @@ public class WriteOffDebtPresenter implements WriteOffDebtOutputBoundary{
      */
     @Override
     public void prepareSuccessView(WriteOffDebtOutputData outputData) {
-
+        final CheckDebtorsState checkDebtorsState = checkDebtorsViewModel.getState();
+        checkDebtorsState.setDebtors(outputData.getDebtors());
+        checkDebtorsViewModel.setState(checkDebtorsState);
+        checkDebtorsViewModel.firePropertyChanged();
     }
 
     /**

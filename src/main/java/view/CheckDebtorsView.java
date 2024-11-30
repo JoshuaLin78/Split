@@ -5,6 +5,7 @@ import interface_adapter.bill_confirmation.BillConfirmationState;
 import interface_adapter.check_debtors.CheckDebtorsController;
 import interface_adapter.check_debtors.CheckDebtorsState;
 import interface_adapter.check_debtors.CheckDebtorsViewModel;
+import interface_adapter.write_off_debt.WriteOffDebtController;
 import use_cases.check_debtors.CheckDebtorsInteractor;
 import use_cases.check_debtors.CheckDebtorsOutputBoundary;
 
@@ -24,8 +25,9 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
     private final JScrollPane scrollPane;
     private final JLabel totalLabel;
 
-    private interface_adapter.check_debtors.CheckDebtorsViewModel checkDebtorsViewModel;
-    private interface_adapter.check_debtors.CheckDebtorsController checkDebtorsController;
+    private CheckDebtorsViewModel checkDebtorsViewModel;
+    private CheckDebtorsController checkDebtorsController;
+    private WriteOffDebtController writeOffDebtController;
 
     public CheckDebtorsView(CheckDebtorsViewModel checkDebtorsViewModel) {
         this.checkDebtorsViewModel = checkDebtorsViewModel;
@@ -83,6 +85,34 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
 
             JLabel debtLabel = new JLabel(String.format("$%.2f", debt), SwingConstants.LEFT);
             scrollablePanel.add(debtLabel);
+
+            JButton writeOffDebtButton = new JButton("Write Off Debt");
+
+            writeOffDebtButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    do {
+                        try {
+                            String input = JOptionPane.showInputDialog("Enter the amount to write off: ");
+                            if (input == null) {
+                                return;
+                            }
+                            String inputRounded = String.format("%.2f", Double.parseDouble(input));
+                            double amount = Double.parseDouble(inputRounded);
+                            if (amount < 0) {
+                                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a positive number.");
+                                continue;
+                            }
+                            writeOffDebtController.execute(debtor, amount);
+                            break;
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
+                        }
+                    } while (true);
+                }
+            });
+
+            scrollablePanel.add(writeOffDebtButton);
         }
 
         scrollablePanel.add(new JSeparator(SwingConstants.HORIZONTAL));
@@ -111,5 +141,9 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
 
     public void setCheckDebtorsController(CheckDebtorsController checkDebtorsController) {
         this.checkDebtorsController = checkDebtorsController;
+    }
+
+    public void setWriteOffDebtController(WriteOffDebtController writeOffDebtController) {
+        this.writeOffDebtController = writeOffDebtController;
     }
 }

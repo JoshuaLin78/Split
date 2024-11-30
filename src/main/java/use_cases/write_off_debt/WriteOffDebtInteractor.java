@@ -19,6 +19,9 @@ public class WriteOffDebtInteractor implements WriteOffDebtInputBoundary {
     @Override
     public void execute(WriteOffDebtInputData writeOffDebtInputData) {
         debtorDataAccessInterface.writeOffDebt(writeOffDebtInputData.getDebtor(), writeOffDebtInputData.getAmount());
+        final WriteOffDebtOutputData writeOffDebtOutputData =
+                new WriteOffDebtOutputData(debtorDataAccessInterface.getAll());
+        userPresenter.prepareSuccessView(writeOffDebtOutputData);
     }
 }
 
