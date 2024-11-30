@@ -318,25 +318,44 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
     }
 
     private void updateTableWithBillData(String[][] billInformation) {
-        // Clear all components in the panel and reset the price map
+        // clear all components in the panel and reset the price map
         tablePanel.removeAll();
         originalPriceMap.clear();
 
-        // Rebuild the table with the new bill information
+
+        JLabel rowNumberLabel = new JLabel("#", SwingConstants.CENTER);
+        JLabel itemNameLabel = new JLabel("Item Name", SwingConstants.CENTER);
+        JLabel priceLabel = new JLabel("Price", SwingConstants.CENTER);
+        JLabel quantityLabel = new JLabel("Quantity", SwingConstants.CENTER);
+        JLabel orderedByLabel = new JLabel("Ordered by", SwingConstants.CENTER);
+
+        rowNumberLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        itemNameLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        priceLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        quantityLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        orderedByLabel.setFont(new Font("Arial", Font.BOLD, 12));
+
+        tablePanel.add(rowNumberLabel);
+        tablePanel.add(itemNameLabel);
+        tablePanel.add(priceLabel);
+        tablePanel.add(quantityLabel);
+        tablePanel.add(orderedByLabel);
+
+
         int currentRow = 1;
         for (String[] row : billInformation) {
             String dishName = row[0];
             double basePrice = Double.parseDouble(row[2]);
             int quantity = Integer.parseInt(row[1]);
 
-            // Create components for this row
-            JLabel rowNumberLabel = new JLabel(String.valueOf(currentRow), SwingConstants.CENTER);
+
+            JLabel rowNumberLabelRow = new JLabel(String.valueOf(currentRow), SwingConstants.CENTER);
             JTextField itemField = new JTextField(dishName);
             JTextField priceField = new JTextField(String.format("%.2f", basePrice * quantity));
             JTextField quantityField = new JTextField(String.valueOf(quantity));
-            JTextField orderedByField = new JTextField(); // Create a new "Ordered By" field
+            JTextField orderedByField = new JTextField();
 
-            // Set up quantity controls (if applicable)
+
             JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
             JButton increaseButton = new JButton("+");
             JButton decreaseButton = new JButton("-");
@@ -344,32 +363,87 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
             quantityPanel.add(quantityField);
             quantityPanel.add(increaseButton);
 
-            // Add listeners for quantity buttons
-            increaseButton.addActionListener(e -> updateQuantity(quantityField, priceField, basePrice, 1));
-            decreaseButton.addActionListener(e -> updateQuantity(quantityField, priceField, basePrice, -1));
 
-            // Add components to the panel
-            tablePanel.add(rowNumberLabel);
+            increaseButton.addActionListener(e -> updateQuantity(quantityField, priceField, originalPriceMap.getOrDefault(priceField, basePrice), 1));
+            decreaseButton.addActionListener(e -> updateQuantity(quantityField, priceField, originalPriceMap.getOrDefault(priceField, basePrice), -1));
+
+
+            priceField.addFocusListener(new FocusAdapter() {
+                private String previousValue = ""; // store the previous value
+
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // save the current value before editing
+                    previousValue = priceField.getText();
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    String currentValue = priceField.getText();
+
+                    // only proceed if the value has changed
+                    if (!currentValue.equals(previousValue)) {
+                        try {
+                            double newBasePrice = Double.parseDouble(currentValue);
+                            if (newBasePrice <= 0) {
+                                throw new IllegalArgumentException("Price must be greater than zero.");
+                            }
+
+                            // update the original price map with the new base price
+                            originalPriceMap.put(priceField, newBasePrice);
+
+                            // reset quantity to 1 and update the price field based on the new base price
+                            quantityField.setText("1");
+                            priceField.setText(String.format("%.2f", newBasePrice));
+
+                            // recalculate the total
+                            calculateTotal();
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(
+                                    BillInputView.this,
+                                    "Please enter a valid numeric price.",
+                                    "Invalid Input",
+                                    JOptionPane.ERROR_MESSAGE
+                            );
+                            // restore the previous value in case of invalid input
+                            priceField.setText(previousValue);
+                        } catch (IllegalArgumentException ex) {
+                            JOptionPane.showMessageDialog(
+                                    BillInputView.this,
+                                    ex.getMessage(),
+                                    "Invalid Price",
+                                    JOptionPane.ERROR_MESSAGE
+                            );
+                            // restore the previous value in case of invalid input
+                            priceField.setText(previousValue);
+                        }
+                    }
+                }
+            });
+
+
+            tablePanel.add(rowNumberLabelRow);
             tablePanel.add(itemField);
             tablePanel.add(priceField);
             tablePanel.add(quantityPanel);
             tablePanel.add(orderedByField);
 
-            // Store the base price for recalculations
+
             originalPriceMap.put(priceField, basePrice);
             currentRow++;
         }
 
-        // Refresh the panel to show new data
+
         tablePanel.revalidate();
         tablePanel.repaint();
 
-        // Recalculate totals based on the new data
+
         calculateTotal();
     }
 
 
-    // Helper method to update quantity
+
+    // helper method to update quantity
     private void updateQuantity(JTextField quantityField, JTextField priceField, double basePrice, int delta) {
         try {
             int quantity = Integer.parseInt(quantityField.getText()) + delta;
@@ -379,7 +453,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                 calculateTotal();
             }
         } catch (NumberFormatException e) {
-            // Handle invalid input gracefully
+            // handle invalid input gracefully
             JOptionPane.showMessageDialog(null, "Invalid quantity input.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -505,7 +579,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         orderedByField.setPreferredSize(new Dimension(100, 25));
 
         if (greyText) {
-            orderedByField.setText("Enter 'Me' for items ordered by you");
+            orderedByField.setText("Enter 'Me*' for items ordered by you");
             orderedByField.setForeground(Color.GRAY);
             orderedByField.addFocusListener(new FocusAdapter() {
                 @Override
