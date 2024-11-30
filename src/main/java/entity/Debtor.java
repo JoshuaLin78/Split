@@ -66,12 +66,7 @@ public class Debtor {
      * @param amount the amount of debt to write off
      */
     public void writeOffDebt(double amount) {
-        if (totalDebt > amount) {
-            totalDebt -= amount;
-        }
-        else{
-            totalDebt = 0;
-        }
+        totalDebt -= amount;
     }
 
     /**

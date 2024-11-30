@@ -35,7 +35,12 @@ public class InMemoryDebtorDataAccessObject implements BillInputDebtorDataAccess
 
     @Override
     public void writeOffDebt(Debtor debtor, double amount) {
-        debtors.get(debtor.getName()).writeOffDebt(amount);
+        if (debtor.getTotalDebt() <= amount) {
+            debtors.remove(debtor.getName());
+        }
+        else {
+            debtors.get(debtor.getName()).writeOffDebt(amount);
+        }
     }
 
     @Override
