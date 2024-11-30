@@ -13,12 +13,18 @@ import interface_adapter.bill_confirmation.BillConfirmationViewModel;
 import interface_adapter.bill_input.BillInputController;
 import interface_adapter.bill_input.BillInputPresenter;
 import interface_adapter.bill_input.BillInputViewModel;
+import interface_adapter.bill_summary.BillSummaryController;
+import interface_adapter.bill_summary.BillSummaryPresenter;
+import interface_adapter.bill_summary.BillSummaryViewModel;
 import interface_adapter.check_debtors.CheckDebtorsController;
 import interface_adapter.check_debtors.CheckDebtorsPresenter;
 import interface_adapter.check_debtors.CheckDebtorsViewModel;
 import interface_adapter.home.HomeController;
 import interface_adapter.home.HomePresenter;
 import interface_adapter.home.HomeViewModel;
+import interface_adapter.view_history.ViewHistoryController;
+import interface_adapter.view_history.ViewHistoryPresenter;
+import interface_adapter.view_history.ViewHistoryViewModel;
 import interface_adapter.write_off_debt.WriteOffDebtController;
 import interface_adapter.write_off_debt.WriteOffDebtPresenter;
 import use_cases.bill_confirmation.BillConfirmationInputBoundary;
@@ -27,20 +33,22 @@ import use_cases.bill_confirmation.BillConfirmationOutputBoundary;
 import use_cases.bill_input.BillInputInputBoundary;
 import use_cases.bill_input.BillInputInteractor;
 import use_cases.bill_input.BillInputOutputBoundary;
+import use_cases.bill_summary.BillSummaryInputBoundary;
+import use_cases.bill_summary.BillSummaryInteractor;
+import use_cases.bill_summary.BillSummaryOutputBoundary;
 import use_cases.check_debtors.CheckDebtorsInputBoundary;
 import use_cases.check_debtors.CheckDebtorsInteractor;
 import use_cases.check_debtors.CheckDebtorsOutputBoundary;
 import use_cases.home.HomeInputBoundary;
 import use_cases.home.HomeInteractor;
 import use_cases.home.HomeOutputBoundary;
+import use_cases.view_history.ViewHistoryInputBoundary;
+import use_cases.view_history.ViewHistoryInteractor;
+import use_cases.view_history.ViewHistoryOutputBoundary;
 import use_cases.write_off_debt.WriteOffDebtInputBoundary;
 import use_cases.write_off_debt.WriteOffDebtInteractor;
 import use_cases.write_off_debt.WriteOffDebtOutputBoundary;
-import view.BillConfirmationView;
-import view.BillInputView;
-import view.CheckDebtorsView;
-import view.HomeView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuiler class, builds the different parts of the Clean Architecture Split program one by one.
@@ -63,6 +71,10 @@ public class AppBuilder {
     private BillConfirmationViewModel billConfirmationViewModel;
     private CheckDebtorsView checkDebtorsView;
     private CheckDebtorsViewModel checkDebtorsViewModel;
+    private ViewHistoryView viewHistoryView;
+    private ViewHistoryViewModel viewHistoryViewModel;
+    private BillSummaryView billSummaryView;
+    private BillSummaryViewModel billSummaryViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -112,9 +124,32 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the ViewHistoryView to the application
+     * @return this builder
+     */
+    public AppBuilder addViewHistoryView(){
+        viewHistoryViewModel = new ViewHistoryViewModel();
+        viewHistoryView = new ViewHistoryView(viewHistoryViewModel);
+        cardPanel.add(viewHistoryView, viewHistoryView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the BillSummaryView to the application
+     * @return this builder
+     */
+    public AppBuilder addBillSummaryView(){
+        billSummaryViewModel = new BillSummaryViewModel();
+        billSummaryView = new BillSummaryView(billSummaryViewModel);
+        cardPanel.add(billSummaryView, billSummaryView.getViewName());
+        return this;
+    }
+
+
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(viewManagerModel,
-                homeViewModel, billInputViewModel, checkDebtorsViewModel);
+                homeViewModel, billInputViewModel, checkDebtorsViewModel, viewHistoryViewModel);
         final HomeInputBoundary homeInteractor = new HomeInteractor(homeOutputBoundary);
 
         final HomeController controller = new HomeController(homeInteractor);
@@ -136,7 +171,7 @@ public class AppBuilder {
     public AppBuilder addBillConfirmationUseCase() {
         final BillConfirmationOutputBoundary billConfirmationOutputBoundary =
                 new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel, homeViewModel,
-                        checkDebtorsViewModel, billInputViewModel);
+                        checkDebtorsViewModel, billInputViewModel, viewHistoryViewModel);
         final BillConfirmationInputBoundary billConfirmationInteractor = new
                 BillConfirmationInteractor(debtorDataAccessObject, billConfirmationOutputBoundary);
 
@@ -164,6 +199,28 @@ public class AppBuilder {
 
         final WriteOffDebtController writeOffDebtController = new WriteOffDebtController(writeOffDebtInteractor);
         checkDebtorsView.setWriteOffDebtController(writeOffDebtController);
+        return this;
+    }
+
+    public AppBuilder addViewHistoryUseCase() {
+        final ViewHistoryOutputBoundary viewHistoryOutputBoundary =
+                new ViewHistoryPresenter(viewManagerModel, homeViewModel, billSummaryViewModel);
+        final ViewHistoryInputBoundary viewHistoryInteractor = new
+                ViewHistoryInteractor(viewHistoryOutputBoundary);
+
+        final ViewHistoryController viewHistoryController = new ViewHistoryController(viewHistoryInteractor);
+        viewHistoryView.setViewHistoryController(viewHistoryController);
+        return this;
+    }
+
+    public AppBuilder addBillSummaryUseCase() {
+        final BillSummaryOutputBoundary billSummaryOutputBoundary =
+                new BillSummaryPresenter(viewManagerModel, viewHistoryViewModel);
+        final BillSummaryInputBoundary billSummaryInteractor = new
+                BillSummaryInteractor(billSummaryOutputBoundary);
+
+        final BillSummaryController billSummaryController = new BillSummaryController(billSummaryInteractor);
+        billSummaryView.setBillSummaryController(billSummaryController);
         return this;
     }
 
