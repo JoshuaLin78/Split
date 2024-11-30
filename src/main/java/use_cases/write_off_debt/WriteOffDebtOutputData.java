@@ -2,15 +2,17 @@ package use_cases.write_off_debt;
 
 import entity.Debtor;
 
-public class WriteOffDebtOutputData {
-    private final Debtor debtor;
+import java.util.List;
 
-    public WriteOffDebtOutputData(Debtor debtor) {
-        this.debtor = debtor;
+public class WriteOffDebtOutputData {
+    private final List<Debtor> debtors;
+
+    public WriteOffDebtOutputData(List<Debtor> debtors) {
+        this.debtors = debtors;
     }
 
-    public Debtor getDebtor() {
-        return debtor;
+    public List<Debtor> getDebtors() {
+        return debtors;
     }
 }
 

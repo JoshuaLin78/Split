@@ -21,6 +21,7 @@ public class Main {
                                             .addBillInputUseCase()
                                             .addBillConfirmationUseCase()
                                             .addCheckDebtorsUseCase()
+                                            .addWriteOffDebtUseCase()
                                             .build();
 
         application.pack();
