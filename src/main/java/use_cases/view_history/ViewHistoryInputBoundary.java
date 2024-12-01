@@ -1,5 +1,8 @@
 package use_cases.view_history;
 
+/**
+ * Input boundary for the view history functions.
+ */
 public interface ViewHistoryInputBoundary {
 
     /**

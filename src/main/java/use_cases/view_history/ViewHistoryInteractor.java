@@ -7,6 +7,10 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
         this.userPresenter = userPresenter;
     }
 
+    /**
+     * Switches the view to a bill summary of the specified order.
+     * @param viewHistoryInputData the input data containing the order summary
+     */
     @Override
     public void orderView(ViewHistoryInputData viewHistoryInputData) {
         ViewHistoryOutputData viewHistoryOutputData = new ViewHistoryOutputData(viewHistoryInputData.getOrderSummary());

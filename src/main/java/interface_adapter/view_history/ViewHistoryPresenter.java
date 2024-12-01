@@ -20,6 +20,10 @@ public class ViewHistoryPresenter implements ViewHistoryOutputBoundary {
         this.billSummaryViewModel = billSummaryViewModel;
     }
 
+    /**
+     * Switches the view to a bill summary of the specified order.
+     * @param outputData
+     */
     @Override
     public void orderView(ViewHistoryOutputData outputData){
         final BillSummaryState billSummaryState = billSummaryViewModel.getState();
