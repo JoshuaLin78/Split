@@ -7,9 +7,9 @@ import java.util.List;
  */
 public class OrderSummary {
     List<Order> orders;
-    private double subtotal;
     private double tax;
     private double tip;
+    private double subtotal;
     private double total;
 
     /**
@@ -17,12 +17,14 @@ public class OrderSummary {
      * @param orders list of the orders.
      * @param tax tax in dollars.
      * @param tip tip in dollars.
+     * @param subtotal the subtotal in dollars.
      * @param total total in dollars.
      */
-    public OrderSummary(List<Order> orders, double tax, double tip, double total) {
+    public OrderSummary(List<Order> orders, double tax, double tip, double subtotal, double total) {
         this.orders = orders;
         this.tax = tax;
         this.tip = tip;
+        this.subtotal = subtotal;
         this.total = total;
     }
 
@@ -40,5 +42,9 @@ public class OrderSummary {
 
     public double getTotal() {
         return total;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
     }
 }
