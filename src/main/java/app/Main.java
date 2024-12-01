@@ -17,11 +17,15 @@ public class Main {
                                             .addBillInputView()
                                             .addBillConfirmationView()
                                             .addCheckDebtorsView()
+                                            .addViewHistoryView()
+                                            .addBillSummaryView()
                                             .addHomeUseCase()
                                             .addBillInputUseCase()
                                             .addBillConfirmationUseCase()
                                             .addCheckDebtorsUseCase()
                                             .addWriteOffDebtUseCase()
+                                            .addViewHistoryUseCase()
+                                            .addBillSummaryUseCase()
                                             .build();
 
         application.pack();

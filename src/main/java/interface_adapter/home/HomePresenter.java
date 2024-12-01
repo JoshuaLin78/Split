@@ -3,21 +3,25 @@ package interface_adapter.home;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.bill_input.BillInputViewModel;
 import interface_adapter.check_debtors.CheckDebtorsViewModel;
+import interface_adapter.view_history.ViewHistoryViewModel;
 import use_cases.home.HomeOutputBoundary;
 import use_cases.home.HomeOutputData;
+import view.ViewHistoryView;
 
 public class HomePresenter implements HomeOutputBoundary{
     private final HomeViewModel homeViewModel;
     private final ViewManagerModel viewManagerModel;
     private final BillInputViewModel billInputViewModel;
     private final CheckDebtorsViewModel checkDebtorsViewModel;
+    private final ViewHistoryViewModel viewHistoryViewModel;
 
     public HomePresenter(ViewManagerModel viewManagerModel, HomeViewModel homeViewModel,
-                         BillInputViewModel billInputViewModel, CheckDebtorsViewModel checkDebtorsViewModel) {
+                         BillInputViewModel billInputViewModel, CheckDebtorsViewModel checkDebtorsViewModel, ViewHistoryViewModel viewHistoryViewModel) {
         this.homeViewModel = homeViewModel;
         this.viewManagerModel = viewManagerModel;
         this.billInputViewModel = billInputViewModel;
         this.checkDebtorsViewModel = checkDebtorsViewModel;
+        this.viewHistoryViewModel = viewHistoryViewModel;
     }
 
     /**
@@ -59,6 +63,7 @@ public class HomePresenter implements HomeOutputBoundary{
      */
     @Override
     public void switchToHistoryView() {
-        //to be completed when history view is implemented
+        viewManagerModel.setState(viewHistoryViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 }
