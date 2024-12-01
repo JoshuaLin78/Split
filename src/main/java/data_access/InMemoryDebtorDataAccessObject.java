@@ -10,8 +10,12 @@ import use_cases.bill_confirmation.BillConfirmationDebtorDataAccessInterface;
 import use_cases.bill_input.BillInputDebtorDataAccessInterface;
 import use_cases.write_off_debt.WriteOffDebtDebtorDataAccessInterface;
 
+/**
+ * In memory implementation of DAO that stores debtor data.
+ */
 public class InMemoryDebtorDataAccessObject implements BillInputDebtorDataAccessInterface,
         BillConfirmationDebtorDataAccessInterface, WriteOffDebtDebtorDataAccessInterface {
+
     private final Map<String, Debtor> debtors = new HashMap<>();
 
 

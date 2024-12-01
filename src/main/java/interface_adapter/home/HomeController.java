@@ -1,9 +1,10 @@
 package interface_adapter.home;
 
-import entity.Debtor;
 import use_cases.home.HomeInputBoundary;
-import use_cases.home.HomeInputData;
 
+/**
+ * Controller for the Home View.
+ */
 public class HomeController {
     private final HomeInputBoundary userHomeUseCaseInteractor;
 
@@ -11,20 +12,23 @@ public class HomeController {
         this.userHomeUseCaseInteractor = userHomeUseCaseInteractor;
     }
 
-    public void execute(Debtor debtor, double amount) {
-        final HomeInputData homeInputData = new HomeInputData(debtor, amount);
-
-        userHomeUseCaseInteractor.execute(homeInputData);
-    }
-
+    /**
+     * Switches to the bill input view.
+     */
     public void switchToNewBillView() {
         userHomeUseCaseInteractor.switchToNewBillView();
     }
 
+    /**
+     * Switches to the check debtors view.
+     */
     public void switchToDebtorsView() {
         userHomeUseCaseInteractor.switchToDebtorsView();
     }
 
+    /**
+     * Switches to the view history view.
+     */
     public void switchToHistoryView() {
         userHomeUseCaseInteractor.switchToHistoryView();
     }

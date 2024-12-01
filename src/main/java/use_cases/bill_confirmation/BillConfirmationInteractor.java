@@ -2,8 +2,9 @@ package use_cases.bill_confirmation;
 
 import entity.Debtor;
 
-import java.util.List;
-
+/**
+ * Interactor for the bill confirmation use case.
+ */
 public class BillConfirmationInteractor implements BillConfirmationInputBoundary {
     private final BillConfirmationDebtorDataAccessInterface debtorDataAccessInterface;
     private final BillConfirmationOutputBoundary userPresenter;

@@ -13,6 +13,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * The view for the Bill Summary use case.
+ */
 public class BillSummaryView extends JPanel implements ActionListener, PropertyChangeListener {
     private final JPanel scrollablePanel;
     private final JScrollPane scrollPane;

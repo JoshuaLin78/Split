@@ -1,5 +1,8 @@
 package use_cases.bill_confirmation;
 
+/**
+ * Input boundary for actions related to confirming the current bill.
+ */
 public interface BillConfirmationInputBoundary {
 
     /**

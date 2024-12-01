@@ -1,5 +1,8 @@
 package use_cases.bill_confirmation;
 
+/**
+ * Output boundary for the BillConfirmation Use Case
+ */
 public interface BillConfirmationOutputBoundary {
 
     /**

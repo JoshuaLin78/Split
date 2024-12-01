@@ -5,6 +5,9 @@ import entity.Order;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The state for the Bill Input View.
+ */
 public class BillInputState {
     private List<Order> orders = new ArrayList<>();
 

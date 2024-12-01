@@ -19,6 +19,9 @@ import entity.Order;
 import interface_adapter.bill_input.BillInputState;
 import interface_adapter.bill_input.BillInputViewModel;
 
+/**
+ * The view for the bill input use case.
+ */
 public class BillInputView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "Bill Input";
 

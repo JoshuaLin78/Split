@@ -17,6 +17,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+/**
+ * The view for the Check Debtors use case.
+ */
 public class CheckDebtorsView extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final String viewName = "Check Debtors";

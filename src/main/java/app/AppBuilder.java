@@ -146,7 +146,10 @@ public class AppBuilder {
         return this;
     }
 
-
+    /**
+     * Adds the HomeUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(viewManagerModel,
                 homeViewModel, billInputViewModel, checkDebtorsViewModel, viewHistoryViewModel);
@@ -157,6 +160,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the BillInputUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addBillInputUseCase() {
         final BillInputOutputBoundary billInputOutputBoundary = new BillInputPresenter(viewManagerModel,
                 billInputViewModel, billConfirmationViewModel);
@@ -168,6 +175,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the BillConfirmationUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addBillConfirmationUseCase() {
         final BillConfirmationOutputBoundary billConfirmationOutputBoundary =
                 new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel, homeViewModel,
@@ -180,6 +191,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the CheckDebtorsUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addCheckDebtorsUseCase() {
         final CheckDebtorsOutputBoundary checkDebtorsOutputBoundary =
                 new CheckDebtorsPresenter(viewManagerModel, checkDebtorsViewModel, homeViewModel);
@@ -191,6 +206,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the WriteOffDebtUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addWriteOffDebtUseCase() {
         final WriteOffDebtOutputBoundary writeOffDebtOutputBoundary =
                 new WriteOffDebtPresenter(viewManagerModel, checkDebtorsViewModel);
@@ -202,6 +221,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the ViewHistoryUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addViewHistoryUseCase() {
         final ViewHistoryOutputBoundary viewHistoryOutputBoundary =
                 new ViewHistoryPresenter(viewManagerModel, homeViewModel, billSummaryViewModel);
@@ -213,6 +236,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the BillSummaryUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addBillSummaryUseCase() {
         final BillSummaryOutputBoundary billSummaryOutputBoundary =
                 new BillSummaryPresenter(viewManagerModel, viewHistoryViewModel);

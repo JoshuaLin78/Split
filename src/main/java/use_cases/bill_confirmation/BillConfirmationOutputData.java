@@ -5,6 +5,9 @@ import entity.Order;
 
 import java.util.List;
 
+/**
+ * The Output Data for the Bill Confirmation Use Case.
+ */
 public class BillConfirmationOutputData {
     private final List<Order> orders;
     private final double tax;

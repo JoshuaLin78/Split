@@ -1,5 +1,8 @@
 package use_cases.home;
 
+/**
+ * The interactor for the home use case.
+ */
 public class HomeInteractor implements HomeInputBoundary {
     private final HomeOutputBoundary userPresenter;
 

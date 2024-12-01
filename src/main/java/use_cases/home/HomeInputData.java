@@ -3,7 +3,7 @@ package use_cases.home;
 import entity.Debtor;
 
 /**
- * The Input Data for the Write-Off Debt Use Case.
+ * The Input Data for the Home Use Case.
  */
 public class HomeInputData {
     private final Debtor debtor;

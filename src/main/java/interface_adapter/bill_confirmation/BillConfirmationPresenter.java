@@ -12,6 +12,9 @@ import interface_adapter.view_history.ViewHistoryViewModel;
 import use_cases.bill_confirmation.BillConfirmationOutputBoundary;
 import use_cases.bill_confirmation.BillConfirmationOutputData;
 
+/**
+ * Presenter for the Bill Confirmation Use Case
+ */
 public class BillConfirmationPresenter implements BillConfirmationOutputBoundary{
     private final BillConfirmationViewModel billConfirmationViewModel;
     private final ViewManagerModel viewManagerModel;

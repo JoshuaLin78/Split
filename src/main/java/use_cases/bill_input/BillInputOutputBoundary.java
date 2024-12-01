@@ -1,5 +1,8 @@
 package use_cases.bill_input;
 
+/**
+ * Output boundary for the BillInput Use Case.
+ */
 public interface BillInputOutputBoundary {
 
     /**
