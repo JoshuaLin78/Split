@@ -18,6 +18,10 @@ public class BillSummaryView extends JPanel implements ActionListener, PropertyC
     private final JScrollPane scrollPane;
     private final String viewName = "Bill Summary";
 
+    private final JLabel taxLabel;
+    private final JLabel tipLabel;
+    private final JLabel totalLabel;
+
     private BillSummaryViewModel billSummaryViewModel;
     private BillSummaryController billSummaryController;
 
@@ -45,6 +49,21 @@ public class BillSummaryView extends JPanel implements ActionListener, PropertyC
 
         bottomPanel.add(summaryPanel);
 
+        taxLabel = new JLabel("Tax: $0.00", SwingConstants.CENTER);
+        tipLabel = new JLabel("Tips: $0.00", SwingConstants.CENTER);
+        totalLabel = new JLabel("Grand Total: $0.00", SwingConstants.CENTER);
+
+        taxLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        tipLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        totalLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+        summaryPanel.add(taxLabel);
+        summaryPanel.add(tipLabel);
+        summaryPanel.add(totalLabel);
+
+        bottomPanel.add(summaryPanel);
+
+
 
         JPanel buttonPanel = new JPanel();
         JButton doneButton = new JButton("Back");
@@ -68,17 +87,18 @@ public class BillSummaryView extends JPanel implements ActionListener, PropertyC
             scrollablePanel.add(nameLabel);
 
             double price = order.getPrice();
-            double quantity = order.getQuantity();
+            int quantity = order.getQuantity();
             String[] consumers = order.getConsumers();
+            double subtotal = price * quantity;
 
-            JLabel priceLabel = new JLabel(String.format("$%.2f", price), SwingConstants.LEFT);
-            JLabel quantityLabel = new JLabel("Quantity: " + String.valueOf(quantity), SwingConstants.LEFT);
+            JLabel subtotalLabel = new JLabel(order.getName() + " (" + String.format("$%.2f", price) + ")"
+                    + " x" + String.valueOf(quantity) + ": " + String.format("$%.2f", subtotal), SwingConstants.LEFT);
+
 
             String orderedBy = "Ordered By: " + String.join(", ", consumers);
 
             JLabel consumerLabel = new JLabel(String.valueOf(orderedBy), SwingConstants.LEFT);
-            scrollablePanel.add(priceLabel);
-            scrollablePanel.add(quantityLabel);
+            scrollablePanel.add(subtotalLabel);
             scrollablePanel.add(consumerLabel);
         }
 
@@ -99,6 +119,10 @@ public class BillSummaryView extends JPanel implements ActionListener, PropertyC
     public void propertyChange(PropertyChangeEvent evt) {
         BillSummaryState state = (BillSummaryState) evt.getNewValue();
         updateScrollablePanel(state.getOrderSummary());
+        taxLabel.setText(String.format("Tax: $%.2f", state.getOrderSummary().getSubtotal() * (state.getOrderSummary().getTax() / 100)));
+        tipLabel.setText(String.format("Tips: $%.2f", state.getOrderSummary().getSubtotal() * (1 + (state.getOrderSummary().getTax() / 100)) *
+                (state.getOrderSummary().getTip() / 100)));
+        totalLabel.setText(String.format("Grand Total: $%.2f", state.getOrderSummary().getTotal()));
     }
 
     public String getViewName() {
