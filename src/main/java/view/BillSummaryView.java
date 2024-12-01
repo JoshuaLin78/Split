@@ -74,11 +74,7 @@ public class BillSummaryView extends JPanel implements ActionListener, PropertyC
             JLabel priceLabel = new JLabel(String.format("$%.2f", price), SwingConstants.LEFT);
             JLabel quantityLabel = new JLabel("Quantity: " + String.valueOf(quantity), SwingConstants.LEFT);
 
-            String orderedBy = "Ordered By:";
-            for (String consumer : consumers) {
-                orderedBy += " ";
-                orderedBy += consumer;
-            }
+            String orderedBy = "Ordered By: " + String.join(", ", consumers);
 
             JLabel consumerLabel = new JLabel(String.valueOf(orderedBy), SwingConstants.LEFT);
             scrollablePanel.add(priceLabel);

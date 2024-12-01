@@ -505,12 +505,12 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         orderedByField.setPreferredSize(new Dimension(100, 25));
 
         if (greyText) {
-            orderedByField.setText("Enter 'Me' for items ordered by you");
+            orderedByField.setText("Enter 'Me*' for items ordered by you");
             orderedByField.setForeground(Color.GRAY);
             orderedByField.addFocusListener(new FocusAdapter() {
                 @Override
                 public void focusGained(FocusEvent e) {
-                    if (orderedByField.getText().equals("Enter 'Me' for items ordered by you")) {
+                    if (orderedByField.getText().equals("Enter 'Me*' for items ordered by you")) {
                         orderedByField.setText("");
                         orderedByField.setForeground(Color.BLACK); // Set color to black when typing
                     }
@@ -519,7 +519,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                 @Override
                 public void focusLost(FocusEvent e) {
                     if (orderedByField.getText().isEmpty()) {
-                        orderedByField.setText("Enter 'Me' for items ordered by you");
+                        orderedByField.setText("Enter 'Me*' for items ordered by you");
                         orderedByField.setForeground(Color.GRAY); // Reset to grey if empty
                     }
                 }
