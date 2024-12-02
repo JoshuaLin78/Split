@@ -37,7 +37,7 @@ import interface_adapter.file_upload.FileUploadController;
  *     <li>{@link BillInputController} - Handles user interactions and facilitates communication between the view and backend logic.</li>
  *     <li>{@link BillInputViewModel} - Maintains the state of the bill data and notifies the view of changes.</li>
  *     <li>{@link FileUploadController} - Supports uploading and processing image files of bills.</li>
- *     <li>{@link api.JsonTo2DArray}, {@link api.OrganizeText}, and {@link api.ImageReader} - Utilities for processing images and text data.</li>
+ *     <li>{@link frameworks.GsonJsonParser}, {@link frameworks.OpenAITextOrganizer}, and {@link frameworks.GoogleVisionOCRProcessor} - Utilities for processing images and text data.</li>
  * </ul>
  *
  * <p>
