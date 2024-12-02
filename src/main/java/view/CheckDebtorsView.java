@@ -21,7 +21,6 @@ import java.util.List;
  * The view for the Check Debtors use case.
  */
 public class CheckDebtorsView extends JPanel implements ActionListener, PropertyChangeListener {
-
     private final String viewName = "Check Debtors";
 
     private final JPanel scrollablePanel;
@@ -36,89 +35,129 @@ public class CheckDebtorsView extends JPanel implements ActionListener, Property
         this.checkDebtorsViewModel = checkDebtorsViewModel;
         checkDebtorsViewModel.addPropertyChangeListener(this);
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(20, 20));
+        setBackground(new Color(250, 250, 250)); // Light gray background
         setSize(800, 600);
 
+        // Header Section
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BorderLayout());
+        headerPanel.setBackground(new Color(100, 149, 237)); // Cornflower blue
 
         JLabel titleLabel = new JLabel("View Debtors", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        add(titleLabel, BorderLayout.NORTH);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
 
+        add(headerPanel, BorderLayout.NORTH);
 
+        // Scrollable Panel
         scrollablePanel = new JPanel();
         scrollablePanel.setLayout(new BoxLayout(scrollablePanel, BoxLayout.Y_AXIS));
+        scrollablePanel.setBackground(Color.WHITE);
+        scrollablePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         scrollPane = new JScrollPane(scrollablePanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
         add(scrollPane, BorderLayout.CENTER);
 
+        // Bottom Panel
+        JPanel bottomPanel = new JPanel(new BorderLayout(10, 10));
+        bottomPanel.setOpaque(false);
 
-        JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
-
+        // Summary Panel
         JPanel summaryPanel = new JPanel(new GridLayout(1, 1));
-
+        summaryPanel.setOpaque(false);
         totalLabel = new JLabel("Total Owed: $0.00", SwingConstants.CENTER);
-
         totalLabel.setFont(new Font("Arial", Font.BOLD, 16));
-
+        totalLabel.setForeground(new Color(80, 80, 80)); // Medium gray
         summaryPanel.add(totalLabel);
 
-        bottomPanel.add(summaryPanel);
+        bottomPanel.add(summaryPanel, BorderLayout.NORTH);
 
-
+        // Button Panel
         JPanel buttonPanel = new JPanel();
-        JButton doneButton = new JButton("Done");
+        buttonPanel.setOpaque(false);
+        JButton doneButton = createModernButton("Done");
 
         doneButton.addActionListener(this);
-
         buttonPanel.add(doneButton);
 
-        bottomPanel.add(buttonPanel);
+        bottomPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    private JButton createModernButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.PLAIN, 16));
+        button.setFocusPainted(false);
+        button.setBackground(Color.WHITE);
+        button.setForeground(Color.BLACK);
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Hover Effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(230, 230, 250)); // Light lavender
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(Color.WHITE);
+            }
+        });
+        return button;
+    }
+
     private void updateScrollablePanel(List<Debtor> debtors) {
         scrollablePanel.removeAll();
+
         for (Debtor debtor : debtors) {
+            JPanel debtorPanel = new JPanel(new BorderLayout());
+            debtorPanel.setOpaque(false);
+
             JLabel nameLabel = new JLabel(debtor.getName(), SwingConstants.LEFT);
-            nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
-            scrollablePanel.add(nameLabel);
+            nameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+            nameLabel.setForeground(new Color(100, 149, 237)); // Blue
+            debtorPanel.add(nameLabel, BorderLayout.NORTH);
 
-            double debt = debtor.getTotalDebt();
+            JLabel debtLabel = new JLabel(String.format("Owed: $%.2f", debtor.getTotalDebt()), SwingConstants.LEFT);
+            debtLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            debtLabel.setForeground(new Color(90, 90, 90)); // Subtle gray
+            debtorPanel.add(debtLabel, BorderLayout.CENTER);
 
-            JLabel debtLabel = new JLabel(String.format("$%.2f", debt), SwingConstants.LEFT);
-            scrollablePanel.add(debtLabel);
+            JButton writeOffDebtButton = createModernButton("Write Off Debt");
+            writeOffDebtButton.addActionListener(e -> {
+                while (true) {
+                    try {
+                        String input = JOptionPane.showInputDialog("Enter the amount to write off: ");
+                        if (input == null) return;
 
-            JButton writeOffDebtButton = new JButton("Write Off Debt");
-
-            writeOffDebtButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    do {
-                        try {
-                            String input = JOptionPane.showInputDialog("Enter the amount to write off: ");
-                            if (input == null) {
-                                return;
-                            }
-                            String inputRounded = String.format("%.2f", Double.parseDouble(input));
-                            double amount = Double.parseDouble(inputRounded);
-                            if (amount < 0) {
-                                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a positive number.");
-                                continue;
-                            }
-                            writeOffDebtController.execute(debtor, amount);
-                            break;
-                        } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
+                        double amount = Double.parseDouble(input);
+                        if (amount < 0) {
+                            JOptionPane.showMessageDialog(null, "Please enter a positive amount.");
+                            continue;
                         }
-                    } while (true);
+                        writeOffDebtController.execute(debtor, amount);
+                        break;
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
+                    }
                 }
             });
+            debtorPanel.add(writeOffDebtButton, BorderLayout.SOUTH);
 
-            scrollablePanel.add(writeOffDebtButton);
+            scrollablePanel.add(debtorPanel);
+            scrollablePanel.add(new JSeparator(SwingConstants.HORIZONTAL)); // Separator
         }
-
-        scrollablePanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
         scrollablePanel.revalidate();
         scrollablePanel.repaint();

@@ -2,6 +2,9 @@ package use_cases.view_history;
 
 import entity.OrderSummary;
 
+/**
+ * The input data for the view history use case.
+ */
 public class ViewHistoryInputData {
     private final OrderSummary orderSummary;
 

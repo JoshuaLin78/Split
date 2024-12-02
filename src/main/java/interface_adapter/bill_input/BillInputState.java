@@ -11,6 +11,16 @@ import java.util.List;
 public class BillInputState {
     private List<Order> orders = new ArrayList<>();
 
+    private String[][] tableData;
+
+    public String[][] getTableData() {
+        return tableData;
+    }
+
+    public void setTableData(String[][] tableData) {
+        this.tableData = tableData;
+    }
+
     public List<Order> getOrders() {
         return orders;
     }
@@ -23,4 +33,6 @@ public class BillInputState {
     public String toString(){
         return "BillInputState";
     }
+
+
 }

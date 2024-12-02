@@ -50,6 +50,7 @@ public class BillConfirmationPresenter implements BillConfirmationOutputBoundary
         OrderSummary orderSummary= new OrderSummary(outputData.getOrders(),
                                                     outputData.getTax(),
                                                     outputData.getTip(),
+                                                    outputData.getSubtotal(),
                                                     outputData.getTotal());
         viewHistoryState.addOrderSummary(orderSummary);
         this.viewHistoryViewModel.setState(viewHistoryState);
