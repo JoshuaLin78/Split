@@ -11,10 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import api.JsonTo2DArray;
-import api.OrganizeText;
 import interface_adapter.bill_input.BillInputController;
-import api.ImageReader;
 import entity.Order;
 import interface_adapter.bill_input.BillInputState;
 import interface_adapter.bill_input.BillInputViewModel;
