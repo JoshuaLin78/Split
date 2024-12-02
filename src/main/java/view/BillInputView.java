@@ -100,6 +100,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                 if (option == JFileChooser.APPROVE_OPTION) {
                     String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                     String imageName = fileChooser.getSelectedFile().getName();
+                    imageNameField.setText(imageName);
 
                     //FileUploadUseCase
                     fileUploadController.execute(filePath);
