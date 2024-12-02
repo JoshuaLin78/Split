@@ -53,7 +53,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         add(headerPanel, BorderLayout.NORTH);
 
         // buttons
-        JButton clearButton = new JButton("Clear Bill");
+        JButton clearButton = createStyledButton("Clear Bill");
 
         clearButton.addActionListener(new ActionListener() {
             @Override
@@ -72,7 +72,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
             }
         });
 
-        JButton doneButton = new JButton("Return Home");
+        JButton doneButton = createStyledButton("Return Home");
         doneButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -84,10 +84,10 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         });
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton uploadButton = new JButton("Upload Photo");
-        imageNameField = new JTextField(15);
+        JButton uploadButton = createStyledButton("Upload Photo");
+        imageNameField = createStyledTextField("", 15, "");
         imageNameField.setEditable(false);
-        JButton submitButton = new JButton("Submit Bill");
+        JButton submitButton = createStyledButton("Submit Bill");
 
         uploadButton.addActionListener(new ActionListener() {
             @Override
@@ -109,7 +109,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                     JProgressBar progressBar = new JProgressBar(0, 100);
                     progressBar.setValue(0);
 
-                    JButton cancelButton = new JButton("Cancel");
+                    JButton cancelButton = createStyledButton("Cancel");
                     progressPanel.add(progressLabel, BorderLayout.NORTH);
                     progressPanel.add(progressBar, BorderLayout.CENTER);
                     progressPanel.add(cancelButton, BorderLayout.SOUTH);
@@ -236,11 +236,13 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
         // start with 5 rows by default
         for (int i = 1; i <= 5; i++) {
-            if (i == 1){
-                addRow(i, true);
+            if (i == 1) {
+                addRow(i, true); // Special row for row 1
+            } else {
+                addRow(i, false); // Regular rows for others
             }
-            addRow(i, false);
         }
+
 
         // adds tablePanel to a scroll pane and center it
         JScrollPane scrollPane = new JScrollPane(tablePanel);
@@ -251,8 +253,8 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // centering the bottom panel
 
         // buttons to manage rows
-        JButton addRowButton = new JButton("Add Row");
-        JButton removeRowButton = new JButton("Remove Row");
+        JButton addRowButton = createStyledButton("Add Row");
+        JButton removeRowButton = createStyledButton("Remove Row");
 
         addRowButton.setPreferredSize(new Dimension(100, 30));
         removeRowButton.setPreferredSize(new Dimension(120, 30));  // increased width for full text display
@@ -260,12 +262,14 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         addRowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addRow(tablePanel.getComponentCount() / 5, false);  // calculate row number
+                int currentRowCount = tablePanel.getComponentCount() / 5 - 1; // Subtract 1 for header row
+                addRow(currentRowCount + 1, false);
                 tablePanel.revalidate();
                 tablePanel.repaint();
                 calculateTotal();
             }
         });
+
 
         removeRowButton.addActionListener(new ActionListener() {
             @Override
@@ -282,7 +286,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
         // tax Field
         JLabel taxLabel = new JLabel("Tax (%)");
-        taxField = new JTextField("0", 5);
+        taxField = createStyledTextField("0", 5, "");
         taxField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -292,7 +296,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
         // tip Field
         JLabel tipLabel = new JLabel("Tip (%)");
-        tipField = new JTextField("0", 5);
+        tipField = createStyledTextField("0", 5, "");
         tipField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -302,7 +306,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
         // total Field
         JLabel totalLabel = new JLabel("Total:");
-        totalField = new JTextField("0.00", 10);
+        totalField = createStyledTextField("0.00", 10, "");
         totalField.setEditable(false);
 
         bottomPanel.add(taxLabel);
@@ -350,15 +354,15 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
 
             JLabel rowNumberLabelRow = new JLabel(String.valueOf(currentRow), SwingConstants.CENTER);
-            JTextField itemField = new JTextField(dishName);
-            JTextField priceField = new JTextField(String.format("%.2f", basePrice * quantity));
-            JTextField quantityField = new JTextField(String.valueOf(quantity));
-            JTextField orderedByField = new JTextField();
+            JTextField itemField = createStyledTextField(dishName, 0, "");
+            JTextField priceField = createStyledTextField(String.format("%.2f", basePrice * quantity), 0 , "");
+            JTextField quantityField = createStyledTextField(String.valueOf(quantity),  0, "");
+            JTextField orderedByField = createStyledTextField("", 0, "");
 
 
             JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
-            JButton increaseButton = new JButton("+");
-            JButton decreaseButton = new JButton("-");
+            JButton increaseButton = createAddButton();
+            JButton decreaseButton = createMinusButton();
             quantityPanel.add(decreaseButton);
             quantityPanel.add(quantityField);
             quantityPanel.add(increaseButton);
@@ -566,13 +570,13 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
     // add a new row for bill
     private void addRow(int rowNum, boolean greyText) {
         JLabel rowNumberLabel = new JLabel(String.valueOf(rowNum), SwingConstants.CENTER);
-        JTextField itemField = new JTextField();
-        JTextField priceField = new JTextField();
-        JTextField orderedByField = new JTextField();
+        JTextField itemField = createStyledTextField("", 0, "");
+        JTextField priceField = createStyledTextField("", 0, "");
+        JTextField orderedByField = createStyledTextField("", 0, "");
 
-        JTextField quantityField = new JTextField("1");  // default quantity to 1
-        JButton increaseQuantityButton = new JButton("+");
-        JButton decreaseQuantityButton = new JButton("-");
+        JTextField quantityField = createStyledTextField("1", 0, "");  // default quantity to 1
+        JButton increaseQuantityButton = createAddButton();
+        JButton decreaseQuantityButton = createMinusButton();
 
         rowNumberLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         itemField.setPreferredSize(new Dimension(100, 25));
@@ -583,23 +587,23 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
             orderedByField.setText("Enter 'Me*' for items ordered by you");
             orderedByField.setForeground(Color.GRAY);
             orderedByField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    if (orderedByField.getText().equals("Enter 'Me*' for items ordered by you")) {
-                        orderedByField.setText("");
-                        orderedByField.setForeground(Color.BLACK); // Set color to black when typing
-                    }
-                }
+                                                @Override
+                                                public void focusGained(FocusEvent e) {
+                                                    if (orderedByField.getText().equals("Enter 'Me*' for items ordered by you")) {
+                                                        orderedByField.setText("");
+                                                        orderedByField.setForeground(Color.BLACK); // Set color to black when typing
+                                                    }
+                                                }
 
-                @Override
-                public void focusLost(FocusEvent e) {
-                    if (orderedByField.getText().isEmpty()) {
-                        orderedByField.setText("Enter 'Me*' for items ordered by you");
-                        orderedByField.setForeground(Color.GRAY); // Reset to grey if empty
-                    }
-                }
-            }
-        );}
+                                                @Override
+                                                public void focusLost(FocusEvent e) {
+                                                    if (orderedByField.getText().isEmpty()) {
+                                                        orderedByField.setText("Enter 'Me*' for items ordered by you");
+                                                        orderedByField.setForeground(Color.GRAY); // Reset to grey if empty
+                                                    }
+                                                }
+                                            }
+            );}
 
         priceField.addFocusListener(new FocusAdapter() {
             private String previousValue = ""; // to store the previous value of the field
@@ -730,6 +734,117 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
             calculateTotal();
         }
     }
+
+    private JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 12));
+        button.setBackground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        button.setPreferredSize(new Dimension(120, 30)); // General button size
+
+        // Hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(230, 230, 230)); // Light gray on hover
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(Color.WHITE); // Default white background
+            }
+        });
+
+        return button;
+    }
+
+    private JButton createAddButton() {
+        JButton button = new JButton("+");
+        button.setFont(new Font("Arial", Font.PLAIN, 16));
+        button.setBackground(new Color(200, 255, 200)); // Softer light green
+        button.setForeground(Color.BLACK); // Text color
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        button.setPreferredSize(new Dimension(40, 30)); // Smaller size for compact layout
+
+        // Hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(180, 240, 180)); // Subtler green on hover
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(200, 255, 200)); // Revert to softer light green
+            }
+        });
+
+        return button;
+    }
+
+    private JButton createMinusButton() {
+        JButton button = new JButton("-");
+        button.setFont(new Font("Arial", Font.PLAIN, 16));
+        button.setBackground(new Color(255, 220, 220)); // Softer light red
+        button.setForeground(Color.BLACK); // Text color
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        button.setPreferredSize(new Dimension(40, 30)); // Smaller size for compact layout
+
+        // Hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(240, 200, 200)); // Subtler red on hover
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(255, 220, 220)); // Revert to softer light red
+            }
+        });
+
+        return button;
+    }
+
+    private JTextField createStyledTextField(String text, int columns, String placeholderText) {
+        JTextField textField = new JTextField(text, columns);
+        textField.setFont(new Font("Arial", Font.PLAIN, 14));
+        textField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Removes the default border
+        textField.setMargin(new Insets(5, 5, 5, 5)); // Adds padding inside the text field
+        textField.setBackground(new Color(245, 245, 245)); // Light gray background for a clean look
+
+        // Placeholder text if provided
+        if (placeholderText != null && !placeholderText.isEmpty()) {
+            textField.setForeground(Color.GRAY);
+            textField.setText(placeholderText);
+            textField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if (textField.getText().equals(placeholderText)) {
+                        textField.setText("");
+                        textField.setForeground(Color.BLACK);
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if (textField.getText().isEmpty()) {
+                        textField.setForeground(Color.GRAY);
+                        textField.setText(placeholderText);
+                    }
+                }
+            });
+        }
+
+        return textField;
+    }
+
+
+
+
 
     @Override
     public void actionPerformed(ActionEvent evt) {
