@@ -6,7 +6,7 @@ import interface_adapter.check_debtors.CheckDebtorsViewModel;
 import use_cases.write_off_debt.WriteOffDebtOutputBoundary;
 import use_cases.write_off_debt.WriteOffDebtOutputData;
 
-public class WriteOffDebtPresenter implements WriteOffDebtOutputBoundary{
+public class WriteOffDebtPresenter implements WriteOffDebtOutputBoundary {
     private final CheckDebtorsViewModel checkDebtorsViewModel;
     private final ViewManagerModel viewManagerModel;
 

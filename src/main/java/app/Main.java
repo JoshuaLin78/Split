@@ -26,6 +26,7 @@ public class Main {
                                             .addWriteOffDebtUseCase()
                                             .addViewHistoryUseCase()
                                             .addBillSummaryUseCase()
+                                            .addFileUploadUseCase()
                                             .build();
 
         application.pack();
