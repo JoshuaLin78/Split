@@ -8,7 +8,7 @@ public class ViewHistoryInteractor implements ViewHistoryInputBoundary {
     }
 
     @Override
-    public void orderView(ViewHistoryInputData viewHistoryInputData) {
+    public void execute(ViewHistoryInputData viewHistoryInputData) {
         ViewHistoryOutputData viewHistoryOutputData = new ViewHistoryOutputData(viewHistoryInputData.getOrderSummary());
         userPresenter.orderView(viewHistoryOutputData);
     }
