@@ -8,7 +8,7 @@ public interface ViewHistoryInputBoundary {
     /**
      * Executes the View History order view use case.
      */
-    void orderView(ViewHistoryInputData viewHistoryInputData);
+    void execute(ViewHistoryInputData viewHistoryInputData);
 
     /**
      * Returns to the homepage.

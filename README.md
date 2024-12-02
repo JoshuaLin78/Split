@@ -1,6 +1,6 @@
-**# Split**
+# Split
 
-## Authors:
+## Team Members:
 - Joshua Lin: JoshuaLin78
 - Edison Lim: EdisonLim17
 - Wesley Liu: Wes719

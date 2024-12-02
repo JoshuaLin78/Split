@@ -1,5 +1,8 @@
 package use_cases.write_off_debt;
 
+/**
+ * The output boundary for the WriteOffDebt Use Case.
+ */
 public interface WriteOffDebtOutputBoundary {
 
     /**

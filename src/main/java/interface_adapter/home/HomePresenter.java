@@ -8,6 +8,9 @@ import use_cases.home.HomeOutputBoundary;
 import use_cases.home.HomeOutputData;
 import view.ViewHistoryView;
 
+/**
+ * Presenter for the Home Use Case.
+ */
 public class HomePresenter implements HomeOutputBoundary{
     private final HomeViewModel homeViewModel;
     private final ViewManagerModel viewManagerModel;

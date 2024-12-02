@@ -6,6 +6,9 @@ import javax.swing.*;
 
 import data_access.InMemoryDebtorDataAccessObject;
 import entity.DebtorFactory;
+import frameworks.GoogleVisionOCRProcessor;
+import frameworks.GsonJsonParser;
+import frameworks.OpenAITextOrganizer;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.bill_confirmation.BillConfirmationController;
 import interface_adapter.bill_confirmation.BillConfirmationPresenter;
@@ -19,6 +22,8 @@ import interface_adapter.bill_summary.BillSummaryViewModel;
 import interface_adapter.check_debtors.CheckDebtorsController;
 import interface_adapter.check_debtors.CheckDebtorsPresenter;
 import interface_adapter.check_debtors.CheckDebtorsViewModel;
+import interface_adapter.file_upload.FileUploadController;
+import interface_adapter.file_upload.FileUploadPresenter;
 import interface_adapter.home.HomeController;
 import interface_adapter.home.HomePresenter;
 import interface_adapter.home.HomeViewModel;
@@ -39,6 +44,12 @@ import use_cases.bill_summary.BillSummaryOutputBoundary;
 import use_cases.check_debtors.CheckDebtorsInputBoundary;
 import use_cases.check_debtors.CheckDebtorsInteractor;
 import use_cases.check_debtors.CheckDebtorsOutputBoundary;
+import use_cases.file_upload.FileUploadInputBoundary;
+import use_cases.file_upload.FileUploadInteractor;
+import use_cases.file_upload.FileUploadOutputBoundary;
+import use_cases.file_upload.interfaces.JsonParserInterface;
+import use_cases.file_upload.interfaces.OCRProcessorInterface;
+import use_cases.file_upload.interfaces.TextOrganizerInterface;
 import use_cases.home.HomeInputBoundary;
 import use_cases.home.HomeInteractor;
 import use_cases.home.HomeOutputBoundary;
@@ -146,7 +157,10 @@ public class AppBuilder {
         return this;
     }
 
-
+    /**
+     * Adds the HomeUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(viewManagerModel,
                 homeViewModel, billInputViewModel, checkDebtorsViewModel, viewHistoryViewModel);
@@ -157,6 +171,24 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addFileUploadUseCase() {
+        final FileUploadOutputBoundary fileUploadOutputBoundary =
+                new FileUploadPresenter(viewManagerModel, billInputViewModel);
+        final OCRProcessorInterface ocrProcessor = new GoogleVisionOCRProcessor();
+        final TextOrganizerInterface textOrganizer = new OpenAITextOrganizer();
+        final JsonParserInterface jsonParser = new GsonJsonParser();
+        final FileUploadInputBoundary fileUploadInteractor = new
+                FileUploadInteractor(ocrProcessor, textOrganizer, jsonParser, fileUploadOutputBoundary);
+
+        final FileUploadController fileUploadController = new FileUploadController(fileUploadInteractor);
+        billInputView.setFileUploadController(fileUploadController);
+        return this;
+    }
+
+    /**
+     * Adds the BillInputUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addBillInputUseCase() {
         final BillInputOutputBoundary billInputOutputBoundary = new BillInputPresenter(viewManagerModel,
                 billInputViewModel, billConfirmationViewModel);
@@ -168,6 +200,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the BillConfirmationUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addBillConfirmationUseCase() {
         final BillConfirmationOutputBoundary billConfirmationOutputBoundary =
                 new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel, homeViewModel,
@@ -180,6 +216,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the CheckDebtorsUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addCheckDebtorsUseCase() {
         final CheckDebtorsOutputBoundary checkDebtorsOutputBoundary =
                 new CheckDebtorsPresenter(viewManagerModel, checkDebtorsViewModel, homeViewModel);
@@ -191,6 +231,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the WriteOffDebtUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addWriteOffDebtUseCase() {
         final WriteOffDebtOutputBoundary writeOffDebtOutputBoundary =
                 new WriteOffDebtPresenter(viewManagerModel, checkDebtorsViewModel);
@@ -202,6 +246,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the ViewHistoryUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addViewHistoryUseCase() {
         final ViewHistoryOutputBoundary viewHistoryOutputBoundary =
                 new ViewHistoryPresenter(viewManagerModel, homeViewModel, billSummaryViewModel);
@@ -213,6 +261,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the BillSummaryUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addBillSummaryUseCase() {
         final BillSummaryOutputBoundary billSummaryOutputBoundary =
                 new BillSummaryPresenter(viewManagerModel, viewHistoryViewModel);

@@ -6,6 +6,9 @@ import interface_adapter.bill_confirmation.BillConfirmationViewModel;
 import use_cases.bill_input.BillInputOutputBoundary;
 import use_cases.bill_input.BillInputOutputData;
 
+/**
+ * Presenter for the BillInput Use Case.
+ */
 public class BillInputPresenter implements BillInputOutputBoundary {
     private final BillInputViewModel billInputViewModel;
     private final BillConfirmationViewModel billConfirmationViewModel;

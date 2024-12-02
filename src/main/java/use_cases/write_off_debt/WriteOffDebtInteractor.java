@@ -1,7 +1,8 @@
 package use_cases.write_off_debt;
 
-import entity.Debtor;
-
+/**
+ * The input boundary for the write-off debt use case.
+ */
 public class WriteOffDebtInteractor implements WriteOffDebtInputBoundary {
     private final WriteOffDebtDebtorDataAccessInterface debtorDataAccessInterface;
     private final WriteOffDebtOutputBoundary userPresenter;

@@ -1,4 +1,4 @@
-package api;
+package frameworks;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -6,15 +6,15 @@ import com.google.gson.JsonParser;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.json.JSONArray;
+import use_cases.file_upload.interfaces.TextOrganizerInterface;
 
 import java.io.IOException;
-
-public class OrganizeText {
-
+public class OpenAITextOrganizer implements TextOrganizerInterface {
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     private static final String API_KEY = System.getenv("OPENAI_API_KEY");
 
-    public static String callGPT(String jumbledText) throws IOException {
+    @Override
+    public String organizeText(String jumbledText) throws IOException {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS) // Connection timeout
                 .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)   // Write timeout

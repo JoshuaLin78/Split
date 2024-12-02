@@ -1,4 +1,4 @@
-package api;
+package frameworks;
 
 public class Examples {
     public static final String scrambledText1 = "Liquor Street\n" +

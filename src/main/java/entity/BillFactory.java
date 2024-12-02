@@ -8,5 +8,5 @@ public class BillFactory {
      * Creates a new bill
      * @return an empty bill
      */
-    Bill create(){ return new Bill(); }
+    public Bill create(){ return new Bill(); }
 }

@@ -13,7 +13,7 @@ public class ViewHistoryController {
 
     public void orderView(OrderSummary orderSummary){
         ViewHistoryInputData viewHistoryInputData = new ViewHistoryInputData(orderSummary);
-        userViewHistoryUseCaseInteractor.orderView(viewHistoryInputData);
+        userViewHistoryUseCaseInteractor.execute(viewHistoryInputData);
     }
 
     public void returnHome(){

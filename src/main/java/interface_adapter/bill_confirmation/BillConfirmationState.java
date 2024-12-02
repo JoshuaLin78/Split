@@ -6,6 +6,9 @@ import entity.Order;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State for the Bill Confirmation View Model
+ */
 public class BillConfirmationState {
     private List<Order> orders = new ArrayList<>();
     private double subtotal = 0.0;

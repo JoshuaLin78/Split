@@ -2,6 +2,9 @@ package interface_adapter.home;
 
 import entity.Debtor;
 
+/**
+ * The state for the Home View.
+ */
 public class HomeState {
     private Debtor debtor = null;
     private double amount = 0.0;

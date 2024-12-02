@@ -1,13 +1,15 @@
-package api;
+package frameworks;
 
 import com.google.gson.*;
+import use_cases.file_upload.interfaces.JsonParserInterface;
 
-public class JsonTo2DArray {
+public class GsonJsonParser implements JsonParserInterface {
 
-    public static String[][] convertJson(String jsonString) {
+    @Override
+    public String[][] convertJson(String jsonString) {
         // Parse the JSON
         Gson gson = new Gson();
-        Dish[] dishes = gson.fromJson(jsonString, Dish[].class);
+        GsonJsonParser.Dish[] dishes = gson.fromJson(jsonString, GsonJsonParser.Dish[].class);
 
         // Convert to a 2D array
         String[][] dishArray = new String[dishes.length][3];
@@ -19,6 +21,7 @@ public class JsonTo2DArray {
 
         return dishArray;
     }
+
 
     // POJO class for parsing JSON
     static class Dish {
