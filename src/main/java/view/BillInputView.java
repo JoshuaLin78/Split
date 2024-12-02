@@ -21,6 +21,55 @@ import interface_adapter.bill_input.BillInputViewModel;
 import interface_adapter.check_debtors.CheckDebtorsState;
 import interface_adapter.file_upload.FileUploadController;
 
+
+/**
+ * The {@code BillInputView} class represents the user interface for entering and managing bill data in a graphical application.
+ * <p>
+ * This class provides functionalities for:
+ * <ul>
+ *     <li>Allowing users to upload an image of a bill, extracting and organizing its text using AI tools.</li>
+ *     <li>Manually entering and editing bill details such as item names, quantities, prices, and who ordered each item.</li>
+ *     <li>Calculating the subtotal, applying tax and tip percentages, and displaying the total bill amount.</li>
+ *     <li>Submitting the processed bill data for further business logic operations via a controller.</li>
+ *     <li>Managing and resetting the bill table dynamically, including adding and removing rows.</li>
+ * </ul>
+ *
+ * <p>
+ * This class integrates multiple components:
+ * <ul>
+ *     <li>{@link BillInputController} - Handles user interactions and facilitates communication between the view and backend logic.</li>
+ *     <li>{@link BillInputViewModel} - Maintains the state of the bill data and notifies the view of changes.</li>
+ *     <li>{@link FileUploadController} - Supports uploading and processing image files of bills.</li>
+ *     <li>{@link api.JsonTo2DArray}, {@link api.OrganizeText}, and {@link api.ImageReader} - Utilities for processing images and text data.</li>
+ * </ul>
+ *
+ * <p>
+ * Features of the user interface include:
+ * <ul>
+ *     <li>Interactive buttons for uploading files, adding/removing table rows, and submitting or clearing data.</li>
+ *     <li>A dynamic table for entering and displaying bill items, with features for updating quantities and prices in real-time.</li>
+ *     <li>Field validation with visual cues (e.g., highlighting invalid inputs) to ensure data integrity.</li>
+ *     <li>Intuitive design using modern Swing components and consistent styling for an enhanced user experience.</li>
+ * </ul>
+ *
+ * <p>
+ * Implementation Details:
+ * <ul>
+ *     <li>Extends {@link JPanel} to be embedded in a larger application frame or card layout.</li>
+ *     <li>Implements {@link ActionListener} to handle button click events.</li>
+ *     <li>Implements {@link PropertyChangeListener} to respond to state changes in the associated view model.</li>
+ * </ul>
+ *
+ * <p>
+ * Usage:
+ * <ol>
+ *     <li>Create an instance of {@code BillInputView} with a {@link BillInputViewModel}.</li>
+ *     <li>Set the appropriate controllers ({@link BillInputController}, {@link FileUploadController}).</li>
+ *     <li>Embed the view into a parent container and interact with it as part of the application workflow.</li>
+ * </ol>
+ *
+ * @version 1.0
+ */
 public class BillInputView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "Bill Input";
 
@@ -37,6 +86,30 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
     private BillInputController billInputController;
     private FileUploadController fileUploadController;
 
+    /**
+     * Constructs a new {@code BillInputView} instance, initializing the graphical user interface
+     * for managing bill data. This includes setting up the layout, user interaction components,
+     * and event listeners for user actions.
+     *
+     * <p>The constructor performs the following tasks:
+     * <ul>
+     *     <li>Configures the main layout and size of the panel.</li>
+     *     <li>Sets up the header section with a title label.</li>
+     *     <li>Initializes buttons for actions such as uploading an image, submitting the bill, and clearing the table.</li>
+     *     <li>Creates a dynamic table for entering and displaying bill items, including default rows with interactive controls.</li>
+     *     <li>Adds input fields for tax, tip, and total calculations.</li>
+     *     <li>Registers the provided {@link BillInputViewModel} to listen for state changes and updates the view accordingly.</li>
+     * </ul>
+     * </p>
+     *
+     * <p>Dependencies:
+     * This constructor expects a non-null {@link BillInputViewModel} instance to manage and synchronize
+     * the state of the bill data.
+     * </p>
+     *
+     * @param billInputViewModel the view model responsible for managing the state of the bill data.
+     *                           It must not be {@code null}.
+     */
     public BillInputView(BillInputViewModel billInputViewModel) {
         this.billInputViewModel = billInputViewModel;
         billInputViewModel.addPropertyChangeListener(this);
@@ -45,8 +118,6 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         setSize(800, 600);
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-
-
 
         // header
         JPanel headerPanel = new JPanel();
@@ -104,101 +175,6 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
                     //FileUploadUseCase
                     fileUploadController.execute(filePath);
-
-//                    // set up the process prompts
-//                    JDialog progressDialog = new JDialog((Frame) null, "Processing Image", true);
-//                    progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-//                    progressDialog.setSize(400, 150);
-//                    progressDialog.setLocationRelativeTo(BillInputView.this);
-//
-//                    JPanel progressPanel = new JPanel(new BorderLayout());
-//                    JLabel progressLabel = new JLabel("Initializing...");
-//                    JProgressBar progressBar = new JProgressBar(0, 100);
-//                    progressBar.setValue(0);
-//
-//                    JButton cancelButton = new JButton("Cancel");
-//                    progressPanel.add(progressLabel, BorderLayout.NORTH);
-//                    progressPanel.add(progressBar, BorderLayout.CENTER);
-//                    progressPanel.add(cancelButton, BorderLayout.SOUTH);
-//                    progressDialog.add(progressPanel);
-
-//                     set up swing worker
-//                    SwingWorker<Void, String> worker = new SwingWorker<>() {
-//                        @Override
-//                        protected Void doInBackground() throws Exception {
-//                            try {
-//                                // Step 1: Initialize (10% progress)
-//                                publish("Starting image processing...", "10");
-//                                Thread.sleep(500); // Simulated delay
-//
-//                                // Step 2: Process Image (30% progress)
-//                                publish("Extracting text using Google Vision...", "30");
-//                                String extractedText = ImageReader.processImageFile(filePath);
-//                                if (isCancelled()) return null;
-//
-//                                if (extractedText.startsWith("Error")) {
-//                                    throw new IOException("Failed to process image: " + extractedText);
-//                                }
-//
-//                                // Step 3: Organize Text (60% progress)
-//                                publish("Organizing text with AI...", "60");
-//                                String organizedText = OrganizeText.callGPT(extractedText);
-//                                if (isCancelled()) return null;
-//
-//                                if (organizedText.isEmpty()) {
-//                                    throw new IOException("Failed to organize text.");
-//                                }
-//
-//                                // Step 4: Parse to Array (90% progress)
-//                                publish("Parsing organized text...", "90");
-//                                String[][] billInformation = JsonTo2DArray.convertJson(organizedText);
-//                                if (isCancelled()) return null;
-//
-//                                if (billInformation.length == 0) {
-//                                    throw new IOException("No valid bill information found.");
-//                                }
-//
-//                                // Step 5: Update Table (simulate 100% with delay)
-//                                publish("Updating table with bill data...", "100");
-//                                SwingUtilities.invokeLater(() -> updateTableWithBillData(billInformation));
-//                                imageNameField.setText(imageName);
-//
-//                                // Simulated delay to ensure 100% message is visible
-//                                Thread.sleep(1000);
-//                            } catch (Exception ex) {
-//                                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(BillInputView.this,
-//                                        "Error during processing: " + ex.getMessage(),
-//                                        "Error",
-//                                        JOptionPane.ERROR_MESSAGE));
-//                            }
-//                            return null;
-//                        }
-//
-//                        @Override
-//                        protected void process(List<String> chunks) {
-//                            // update progress bar and status message with the latest values
-//                            String latestStatus = chunks.get(0); // status
-//                            String latestProgress = chunks.get(1); // value of progress bar as a string
-//                            progressLabel.setText(latestStatus);
-//                            progressBar.setValue(Integer.parseInt(latestProgress));
-//                        }
-//
-//                        @Override
-//                        protected void done() {
-//                            progressDialog.dispose();
-//                            if (isCancelled()) {
-//                                JOptionPane.showMessageDialog(BillInputView.this, "Operation was canceled.", "Canceled", JOptionPane.WARNING_MESSAGE);
-//                            }
-//                        }
-//                    };
-
-//                    cancelButton.addActionListener(event -> {
-//                       // worker.cancel(true);
-//                        progressDialog.dispose();
-//                    });
-
-//                    SwingUtilities.invokeLater(() -> progressDialog.setVisible(true));
-//                   // worker.execute();
                 }
             }
         });
@@ -328,6 +304,12 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         //setVisible(true);
     }
 
+    /**
+     * Updates the bill table with the provided bill data.
+     *
+     * @param billInformation a 2D array containing the bill data, where each row represents an item,
+     *                        including its name, quantity, price, and other relevant details.
+     */
     private void updateTableWithBillData(String[][] billInformation) {
         // clear all components in the panel and reset the price map
         tablePanel.removeAll();
@@ -454,7 +436,14 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
 
 
-    // helper method to update quantity
+    /**
+     * Updates the quantity of an item in the bill table and recalculates its price.
+     *
+     * @param quantityField the text field displaying the quantity of the item.
+     * @param priceField    the text field displaying the price of the item.
+     * @param basePrice     the base price of the item (price for a single unit).
+     * @param delta         the change in quantity (positive for increase, negative for decrease).
+     */
     private void updateQuantity(JTextField quantityField, JTextField priceField, double basePrice, int delta) {
         try {
             int quantity = Integer.parseInt(quantityField.getText()) + delta;
@@ -469,6 +458,15 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         }
     }
 
+    /**
+     * Collects the entered bill data, validates the input, and submits it for processing.
+     * <p>Validates:
+     * <ul>
+     *     <li>Item name, price, and ordered-by fields</li>
+     *     <li>Subtotal, tax, and tip percentages</li>
+     * </ul>
+     * Displays a warning if any validation errors are found.
+     */
     private void submitBill() {
         List<Order> orders = new ArrayList<>();
         boolean invalidInputFound = false;
@@ -545,6 +543,10 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         billInputController.execute(orders, subtotal, tax, tip, total);
     }
 
+    /**
+     * Clears all input fields and rows in the bill table, resetting it to the default state.
+     * Also clears the stored original prices and recalculates the total to reflect the reset.
+     */
     private void clearBillTable() {
         int componentsPerRow = 5;
 
@@ -574,7 +576,12 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
     }
 
 
-    // add a new row for bill
+    /**
+     * Adds a new row to the bill table.
+     *
+     * @param rowNum  the row number to be added.
+     * @param greyText whether the "Ordered by" field should display placeholder text in gray.
+     */
     private void addRow(int rowNum, boolean greyText) {
         JLabel rowNumberLabel = new JLabel(String.valueOf(rowNum), SwingConstants.CENTER);
         JTextField itemField = createStyledTextField("", 0, "");
@@ -694,6 +701,14 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         tablePanel.add(orderedByField);
     }
 
+
+    /**
+     * Updates the price field for an item based on its quantity and original price.
+     *
+     * @param priceField    the text field displaying the price of the item.
+     * @param quantityField the text field displaying the quantity of the item.
+     * @param originalPrice the original price of the item (price for a single unit).
+     */
     private void updatePrice(JTextField priceField, JTextField quantityField, double originalPrice) {
         try {
             int quantity = Integer.parseInt(quantityField.getText());
@@ -704,6 +719,17 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         }
     }
 
+
+    /**
+     * Calculates the total bill amount, including the tax and tip percentages.
+     * <p>Uses:
+     * <ul>
+     *     <li>Original prices for each item</li>
+     *     <li>Quantities of each item</li>
+     *     <li>Tax and tip percentages entered in the fields</li>
+     * </ul>
+     * Updates the total field with the calculated value.
+     */
     private void calculateTotal() {
         double subtotal = 0;
         for (JTextField priceField : originalPriceMap.keySet()) {
@@ -720,6 +746,13 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         totalField.setText(String.format("%.2f", total));
     }
 
+    /**
+     * Parses a percentage value from a string input.
+     * <p>If the input is invalid or not a number, returns 0.</p>
+     *
+     * @param text the string representing a percentage value.
+     * @return the parsed percentage as a double, or 0 if the input is invalid.
+     */
     private double parsePercentage(String text) {
         try {
             return Double.parseDouble(text);
@@ -728,6 +761,11 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         }
     }
 
+    /**
+     * Removes the last row from the bill table if there are more than one rows present.
+     * <p>Also removes the corresponding entry from the original price map
+     * and recalculates the total bill.</p>
+     */
     private void removeRow() {
         int componentCount = tablePanel.getComponentCount();
         if (componentCount > 10) {
@@ -742,6 +780,13 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         }
     }
 
+
+    /**
+     * Creates a styled button with a specified label.
+     *
+     * @param text the text to display on the button.
+     * @return a {@link JButton} styled with font, color, and hover effects.
+     */
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 12));
@@ -766,6 +811,19 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         return button;
     }
 
+
+    /**
+     * Creates a styled button for increasing the quantity of an item.
+     * <p>The button is styled with:
+     * <ul>
+     *     <li>Light green background</li>
+     *     <li>Hover effects</li>
+     *     <li>Compact dimensions for consistent layout</li>
+     * </ul>
+     * </p>
+     *
+     * @return a {@link JButton} with "+" as the label and consistent styling.
+     */
     private JButton createAddButton() {
         JButton button = new JButton("+");
         button.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -791,6 +849,18 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         return button;
     }
 
+    /**
+     * Creates a styled button for decreasing the quantity of an item.
+     * <p>The button is styled with:
+     * <ul>
+     *     <li>Light red background</li>
+     *     <li>Hover effects</li>
+     *     <li>Compact dimensions for consistent layout</li>
+     * </ul>
+     * </p>
+     *
+     * @return a {@link JButton} with "-" as the label and consistent styling.
+     */
     private JButton createMinusButton() {
         JButton button = new JButton("-");
         button.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -816,6 +886,15 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         return button;
     }
 
+
+    /**
+     * Creates a styled text field with optional placeholder text.
+     *
+     * @param text           the initial text to display in the text field.
+     * @param columns        the number of columns for the text field.
+     * @param placeholderText optional placeholder text to display when the field is empty.
+     * @return a {@link JTextField} styled with consistent font and color.
+     */
     private JTextField createStyledTextField(String text, int columns, String placeholderText) {
         JTextField textField = new JTextField(text, columns);
         textField.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -849,15 +928,24 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         return textField;
     }
 
-
-
-
-
+    /**
+     * Handles action events triggered by buttons in the view.
+     * <p>Currently not implemented, as individual buttons have their own listeners.</p>
+     *
+     * @param evt the {@link ActionEvent} triggered by a button click.
+     */
     @Override
     public void actionPerformed(ActionEvent evt) {
         //not implemented message according to lab
     }
 
+
+    /**
+     * Responds to property changes in the {@link BillInputViewModel}.
+     *
+     * @param evt the event representing the change in property.
+     *            The new value is expected to be a {@link BillInputState}.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final BillInputState state = (BillInputState) evt.getNewValue();
@@ -866,26 +954,31 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
         //some error message according to lab
     }
 
+    /**
+     * Retrieves the name of this view.
+     *
+     * @return the name of the view as a {@link String}.
+     */
     public String getViewName() {
         return viewName;
     }
 
+    /**
+     * Sets the {@link BillInputController} for handling user actions in this view.
+     *
+     * @param billInputController the controller to be associated with this view.
+     */
     public void setBillInputController(BillInputController billInputController) {
         this.billInputController = billInputController;
     }
 
+    /**
+     * Sets the {@link FileUploadController} for handling file uploads in this view.
+     *
+     * @param fileUploadController the controller to be associated with this view.
+     */
     public void setFileUploadController(FileUploadController fileUploadController) {
         this.fileUploadController = fileUploadController;
     }
 
-//    public static void main(String[] args) {
-//        //BillInputInputBoundary mockInteractor = new MockBillInputInteractor();
-//        BillInputOutputBoundary billInputOutputBoundary = new BillInputPresenter();
-//        BillInputInputBoundary billInputInteractor = new BillInputInteractor(billInputOutputBoundary);
-//
-//        //just replace mockInteractor with the real one for testing
-//        //BillInputController controller = new BillInputController(mockInteractor);
-//        BillInputController controller = new BillInputController(billInputInteractor);
-//        SwingUtilities.invokeLater(() -> new BillInputView(controller));
-//    }
 }
