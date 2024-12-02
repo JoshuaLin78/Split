@@ -7,6 +7,9 @@ import entity.Order;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Interactor for the bill input use case.
+ */
 public class BillInputInteractor implements BillInputInputBoundary {
     private final BillInputOutputBoundary userPresenter;
     private final DebtorFactory debtorFactory;

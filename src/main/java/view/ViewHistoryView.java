@@ -14,6 +14,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+/**
+ * The view for the View History use case.
+ */
 public class ViewHistoryView extends JPanel implements ActionListener, PropertyChangeListener {
     private final JPanel scrollablePanel;
     private final JScrollPane scrollPane;

@@ -3,7 +3,6 @@ package use_cases.bill_confirmation;
 import entity.Debtor;
 import entity.Order;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,10 +15,7 @@ public class BillConfirmationInputData {
     private final double tip;
     private final double total;
     private final List<Debtor> debtors;
-    /**
-     * Constructor
-     * @param debtors the list of debtors
-     */
+
     public BillConfirmationInputData(List<Order> orders, double subtotal, double tax, double tip, double total,
                                      List<Debtor> debtors) {
         this.orders = orders;

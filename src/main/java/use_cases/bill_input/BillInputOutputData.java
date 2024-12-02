@@ -5,6 +5,9 @@ import entity.Order;
 
 import java.util.List;
 
+/**
+ * Output data for the bill input use case.
+ */
 public class BillInputOutputData {
     private final List<Order> orders;
     private final double subtotal;

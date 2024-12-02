@@ -157,7 +157,10 @@ public class AppBuilder {
         return this;
     }
 
-
+    /**
+     * Adds the HomeUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addHomeUseCase() {
         final HomeOutputBoundary homeOutputBoundary = new HomePresenter(viewManagerModel,
                 homeViewModel, billInputViewModel, checkDebtorsViewModel, viewHistoryViewModel);
@@ -165,51 +168,6 @@ public class AppBuilder {
 
         final HomeController controller = new HomeController(homeInteractor);
         homeView.setHomeController(controller);
-        return this;
-    }
-
-    public AppBuilder addBillInputUseCase() {
-        final BillInputOutputBoundary billInputOutputBoundary = new BillInputPresenter(viewManagerModel,
-                billInputViewModel, billConfirmationViewModel);
-        final BillInputInputBoundary billInputInteractor = new BillInputInteractor(billInputOutputBoundary,
-                debtorFactory);
-
-        final BillInputController controller = new BillInputController(billInputInteractor);
-        billInputView.setBillInputController(controller);
-        return this;
-    }
-
-    public AppBuilder addBillConfirmationUseCase() {
-        final BillConfirmationOutputBoundary billConfirmationOutputBoundary =
-                new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel, homeViewModel,
-                        checkDebtorsViewModel, billInputViewModel, viewHistoryViewModel);
-        final BillConfirmationInputBoundary billConfirmationInteractor = new
-                BillConfirmationInteractor(debtorDataAccessObject, billConfirmationOutputBoundary);
-
-        final BillConfirmationController controller = new BillConfirmationController(billConfirmationInteractor);
-        billConfirmationView.setBillConfirmationController(controller);
-        return this;
-    }
-
-    public AppBuilder addCheckDebtorsUseCase() {
-        final CheckDebtorsOutputBoundary checkDebtorsOutputBoundary =
-                new CheckDebtorsPresenter(viewManagerModel, checkDebtorsViewModel, homeViewModel);
-        final CheckDebtorsInputBoundary checkDebtorsInteractor = new
-                CheckDebtorsInteractor(checkDebtorsOutputBoundary);
-
-        final CheckDebtorsController checkDebtorsController = new CheckDebtorsController(checkDebtorsInteractor);
-        checkDebtorsView.setCheckDebtorsController(checkDebtorsController);
-        return this;
-    }
-
-    public AppBuilder addWriteOffDebtUseCase() {
-        final WriteOffDebtOutputBoundary writeOffDebtOutputBoundary =
-                new WriteOffDebtPresenter(viewManagerModel, checkDebtorsViewModel);
-        final WriteOffDebtInputBoundary writeOffDebtInteractor = new
-                WriteOffDebtInteractor(debtorDataAccessObject, writeOffDebtOutputBoundary);
-
-        final WriteOffDebtController writeOffDebtController = new WriteOffDebtController(writeOffDebtInteractor);
-        checkDebtorsView.setWriteOffDebtController(writeOffDebtController);
         return this;
     }
 
@@ -227,7 +185,71 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the BillInputUseCase to the application
+     * @return this builder
+     */
+    public AppBuilder addBillInputUseCase() {
+        final BillInputOutputBoundary billInputOutputBoundary = new BillInputPresenter(viewManagerModel,
+                billInputViewModel, billConfirmationViewModel);
+        final BillInputInputBoundary billInputInteractor = new BillInputInteractor(billInputOutputBoundary,
+                debtorFactory);
 
+        final BillInputController controller = new BillInputController(billInputInteractor);
+        billInputView.setBillInputController(controller);
+        return this;
+    }
+
+    /**
+     * Adds the BillConfirmationUseCase to the application
+     * @return this builder
+     */
+    public AppBuilder addBillConfirmationUseCase() {
+        final BillConfirmationOutputBoundary billConfirmationOutputBoundary =
+                new BillConfirmationPresenter(viewManagerModel, billConfirmationViewModel, homeViewModel,
+                        checkDebtorsViewModel, billInputViewModel, viewHistoryViewModel);
+        final BillConfirmationInputBoundary billConfirmationInteractor = new
+                BillConfirmationInteractor(debtorDataAccessObject, billConfirmationOutputBoundary);
+
+        final BillConfirmationController controller = new BillConfirmationController(billConfirmationInteractor);
+        billConfirmationView.setBillConfirmationController(controller);
+        return this;
+    }
+
+    /**
+     * Adds the CheckDebtorsUseCase to the application
+     * @return this builder
+     */
+    public AppBuilder addCheckDebtorsUseCase() {
+        final CheckDebtorsOutputBoundary checkDebtorsOutputBoundary =
+                new CheckDebtorsPresenter(viewManagerModel, checkDebtorsViewModel, homeViewModel);
+        final CheckDebtorsInputBoundary checkDebtorsInteractor = new
+                CheckDebtorsInteractor(checkDebtorsOutputBoundary);
+
+        final CheckDebtorsController checkDebtorsController = new CheckDebtorsController(checkDebtorsInteractor);
+        checkDebtorsView.setCheckDebtorsController(checkDebtorsController);
+        return this;
+    }
+
+    /**
+     * Adds the WriteOffDebtUseCase to the application
+     * @return this builder
+     */
+    public AppBuilder addWriteOffDebtUseCase() {
+        final WriteOffDebtOutputBoundary writeOffDebtOutputBoundary =
+                new WriteOffDebtPresenter(viewManagerModel, checkDebtorsViewModel);
+        final WriteOffDebtInputBoundary writeOffDebtInteractor = new
+                WriteOffDebtInteractor(debtorDataAccessObject, writeOffDebtOutputBoundary);
+
+        final WriteOffDebtController writeOffDebtController = new WriteOffDebtController(writeOffDebtInteractor);
+        checkDebtorsView.setWriteOffDebtController(writeOffDebtController);
+        return this;
+    }
+
+    /**
+     * Adds the ViewHistoryUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addViewHistoryUseCase() {
         final ViewHistoryOutputBoundary viewHistoryOutputBoundary =
                 new ViewHistoryPresenter(viewManagerModel, homeViewModel, billSummaryViewModel);
@@ -239,6 +261,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the BillSummaryUseCase to the application
+     * @return this builder
+     */
     public AppBuilder addBillSummaryUseCase() {
         final BillSummaryOutputBoundary billSummaryOutputBoundary =
                 new BillSummaryPresenter(viewManagerModel, viewHistoryViewModel);

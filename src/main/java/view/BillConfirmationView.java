@@ -14,6 +14,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+/**
+ * The view for the Bill Confirmation use case.
+ */
 public class BillConfirmationView extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final String viewName = "Bill Confirmation";

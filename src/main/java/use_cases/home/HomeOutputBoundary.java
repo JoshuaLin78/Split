@@ -1,5 +1,8 @@
 package use_cases.home;
 
+/**
+ * The output boundary for the Home Use Case.
+ */
 public interface HomeOutputBoundary {
 
     /**

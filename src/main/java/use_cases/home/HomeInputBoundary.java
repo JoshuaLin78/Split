@@ -1,5 +1,8 @@
 package use_cases.home;
 
+/**
+ * The input boundary for the home use case.
+ */
 public interface HomeInputBoundary {
 
     /**

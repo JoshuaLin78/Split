@@ -11,6 +11,9 @@ import interface_adapter.home.HomeController;
 import interface_adapter.home.HomeState;
 import interface_adapter.home.HomeViewModel;
 
+/**
+ * The view for the Home use case.
+ */
 public class HomeView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "Home";
 
