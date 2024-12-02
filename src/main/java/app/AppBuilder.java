@@ -4,8 +4,12 @@ import java.awt.CardLayout;
 
 import javax.swing.*;
 
+import api.OCRProcessor;
 import data_access.InMemoryDebtorDataAccessObject;
 import entity.DebtorFactory;
+import frameworks.GoogleVisionOCRProcessor;
+import frameworks.GsonJsonParser;
+import frameworks.OpenAITextOrganizer;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.bill_confirmation.BillConfirmationController;
 import interface_adapter.bill_confirmation.BillConfirmationPresenter;
@@ -19,6 +23,8 @@ import interface_adapter.bill_summary.BillSummaryViewModel;
 import interface_adapter.check_debtors.CheckDebtorsController;
 import interface_adapter.check_debtors.CheckDebtorsPresenter;
 import interface_adapter.check_debtors.CheckDebtorsViewModel;
+import interface_adapter.file_upload.FileUploadController;
+import interface_adapter.file_upload.FileUploadPresenter;
 import interface_adapter.home.HomeController;
 import interface_adapter.home.HomePresenter;
 import interface_adapter.home.HomeViewModel;
@@ -39,6 +45,12 @@ import use_cases.bill_summary.BillSummaryOutputBoundary;
 import use_cases.check_debtors.CheckDebtorsInputBoundary;
 import use_cases.check_debtors.CheckDebtorsInteractor;
 import use_cases.check_debtors.CheckDebtorsOutputBoundary;
+import use_cases.file_upload.FileUploadInputBoundary;
+import use_cases.file_upload.FileUploadInteractor;
+import use_cases.file_upload.FileUploadOutputBoundary;
+import use_cases.file_upload.interfaces.JsonParserInterface;
+import use_cases.file_upload.interfaces.OCRProcessorInterface;
+import use_cases.file_upload.interfaces.TextOrganizerInterface;
 import use_cases.home.HomeInputBoundary;
 import use_cases.home.HomeInteractor;
 import use_cases.home.HomeOutputBoundary;
@@ -201,6 +213,21 @@ public class AppBuilder {
         checkDebtorsView.setWriteOffDebtController(writeOffDebtController);
         return this;
     }
+
+    public AppBuilder addFileUploadUseCase() {
+        final FileUploadOutputBoundary fileUploadOutputBoundary =
+                new FileUploadPresenter(viewManagerModel, billInputViewModel);
+        final OCRProcessorInterface ocrProcessor = new GoogleVisionOCRProcessor();
+        final TextOrganizerInterface textOrganizer = new OpenAITextOrganizer();
+        final JsonParserInterface jsonParser = new GsonJsonParser();
+        final FileUploadInputBoundary fileUploadInteractor = new
+                FileUploadInteractor(ocrProcessor, textOrganizer, jsonParser, fileUploadOutputBoundary);
+
+        final FileUploadController fileUploadController = new FileUploadController(fileUploadInteractor);
+        billInputView.setFileUploadController(fileUploadController);
+        return this;
+    }
+
 
     public AppBuilder addViewHistoryUseCase() {
         final ViewHistoryOutputBoundary viewHistoryOutputBoundary =

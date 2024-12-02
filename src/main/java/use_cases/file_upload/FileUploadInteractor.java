@@ -1,5 +1,6 @@
 package use_cases.file_upload;
 
+import use_cases.bill_input.BillInputOutputData;
 import use_cases.file_upload.interfaces.JsonParserInterface;
 import use_cases.file_upload.interfaces.OCRProcessorInterface;
 import use_cases.file_upload.interfaces.TextOrganizerInterface;
@@ -10,14 +11,17 @@ public class FileUploadInteractor implements FileUploadInputBoundary {
     private final OCRProcessorInterface ocrProcessor;
     private final TextOrganizerInterface textOrganizer;
     private final JsonParserInterface jsonParser;
+    private final FileUploadOutputBoundary userPresenter;
 
     public FileUploadInteractor(
             OCRProcessorInterface ocrProcessor,
             TextOrganizerInterface textOrganizer,
-            JsonParserInterface jsonParser) {
+            JsonParserInterface jsonParser,
+            FileUploadOutputBoundary fileUploadOutputData) {
         this.ocrProcessor = ocrProcessor;
         this.textOrganizer = textOrganizer;
         this.jsonParser = jsonParser;
+        this.userPresenter = fileUploadOutputData;
     }
 
     @Override
@@ -52,12 +56,8 @@ public class FileUploadInteractor implements FileUploadInputBoundary {
                 System.out.println("Error: Failed to convert JSON to 2D array.");
                 return;
             }
-
-            // Step 5: Output the result (for demonstration purposes)
-            System.out.println("File processed successfully. Here is the structured data:");
-            for (String[] row : finalData) {
-                System.out.println(String.join(", ", row));
-            }
+            final FileUploadOutputData fileUploadOutputData = new FileUploadOutputData(finalData);
+            userPresenter.prepareSuccessView(fileUploadOutputData);
 
         } catch (Exception e) {
             System.out.println("Unexpected error during file processing: " + e.getMessage());

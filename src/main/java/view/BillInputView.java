@@ -18,6 +18,8 @@ import api.ImageReader;
 import entity.Order;
 import interface_adapter.bill_input.BillInputState;
 import interface_adapter.bill_input.BillInputViewModel;
+import interface_adapter.check_debtors.CheckDebtorsState;
+import interface_adapter.file_upload.FileUploadController;
 
 public class BillInputView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "Bill Input";
@@ -33,6 +35,7 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
     private BillInputViewModel billInputViewModel;
     private BillInputController billInputController;
+    private FileUploadController fileUploadController;
 
     public BillInputView(BillInputViewModel billInputViewModel) {
         this.billInputViewModel = billInputViewModel;
@@ -115,83 +118,87 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                     progressPanel.add(cancelButton, BorderLayout.SOUTH);
                     progressDialog.add(progressPanel);
 
-                    // set up swing worker
-                    SwingWorker<Void, String> worker = new SwingWorker<>() {
-                        @Override
-                        protected Void doInBackground() throws Exception {
-                            try {
-                                // Step 1: Initialize (10% progress)
-                                publish("Starting image processing...", "10");
-                                Thread.sleep(500); // Simulated delay
+                    //FileUploadUseCase
+                    fileUploadController.execute(filePath);
 
-                                // Step 2: Process Image (30% progress)
-                                publish("Extracting text using Google Vision...", "30");
-                                String extractedText = ImageReader.processImageFile(filePath);
-                                if (isCancelled()) return null;
 
-                                if (extractedText.startsWith("Error")) {
-                                    throw new IOException("Failed to process image: " + extractedText);
-                                }
-
-                                // Step 3: Organize Text (60% progress)
-                                publish("Organizing text with AI...", "60");
-                                String organizedText = OrganizeText.callGPT(extractedText);
-                                if (isCancelled()) return null;
-
-                                if (organizedText.isEmpty()) {
-                                    throw new IOException("Failed to organize text.");
-                                }
-
-                                // Step 4: Parse to Array (90% progress)
-                                publish("Parsing organized text...", "90");
-                                String[][] billInformation = JsonTo2DArray.convertJson(organizedText);
-                                if (isCancelled()) return null;
-
-                                if (billInformation.length == 0) {
-                                    throw new IOException("No valid bill information found.");
-                                }
-
-                                // Step 5: Update Table (simulate 100% with delay)
-                                publish("Updating table with bill data...", "100");
-                                SwingUtilities.invokeLater(() -> updateTableWithBillData(billInformation));
-                                imageNameField.setText(imageName);
-
-                                // Simulated delay to ensure 100% message is visible
-                                Thread.sleep(1000);
-                            } catch (Exception ex) {
-                                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(BillInputView.this,
-                                        "Error during processing: " + ex.getMessage(),
-                                        "Error",
-                                        JOptionPane.ERROR_MESSAGE));
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void process(List<String> chunks) {
-                            // update progress bar and status message with the latest values
-                            String latestStatus = chunks.get(0); // status
-                            String latestProgress = chunks.get(1); // value of progress bar as a string
-                            progressLabel.setText(latestStatus);
-                            progressBar.setValue(Integer.parseInt(latestProgress));
-                        }
-
-                        @Override
-                        protected void done() {
-                            progressDialog.dispose();
-                            if (isCancelled()) {
-                                JOptionPane.showMessageDialog(BillInputView.this, "Operation was canceled.", "Canceled", JOptionPane.WARNING_MESSAGE);
-                            }
-                        }
-                    };
+//                     set up swing worker
+//                    SwingWorker<Void, String> worker = new SwingWorker<>() {
+//                        @Override
+//                        protected Void doInBackground() throws Exception {
+//                            try {
+//                                // Step 1: Initialize (10% progress)
+//                                publish("Starting image processing...", "10");
+//                                Thread.sleep(500); // Simulated delay
+//
+//                                // Step 2: Process Image (30% progress)
+//                                publish("Extracting text using Google Vision...", "30");
+//                                String extractedText = ImageReader.processImageFile(filePath);
+//                                if (isCancelled()) return null;
+//
+//                                if (extractedText.startsWith("Error")) {
+//                                    throw new IOException("Failed to process image: " + extractedText);
+//                                }
+//
+//                                // Step 3: Organize Text (60% progress)
+//                                publish("Organizing text with AI...", "60");
+//                                String organizedText = OrganizeText.callGPT(extractedText);
+//                                if (isCancelled()) return null;
+//
+//                                if (organizedText.isEmpty()) {
+//                                    throw new IOException("Failed to organize text.");
+//                                }
+//
+//                                // Step 4: Parse to Array (90% progress)
+//                                publish("Parsing organized text...", "90");
+//                                String[][] billInformation = JsonTo2DArray.convertJson(organizedText);
+//                                if (isCancelled()) return null;
+//
+//                                if (billInformation.length == 0) {
+//                                    throw new IOException("No valid bill information found.");
+//                                }
+//
+//                                // Step 5: Update Table (simulate 100% with delay)
+//                                publish("Updating table with bill data...", "100");
+//                                SwingUtilities.invokeLater(() -> updateTableWithBillData(billInformation));
+//                                imageNameField.setText(imageName);
+//
+//                                // Simulated delay to ensure 100% message is visible
+//                                Thread.sleep(1000);
+//                            } catch (Exception ex) {
+//                                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(BillInputView.this,
+//                                        "Error during processing: " + ex.getMessage(),
+//                                        "Error",
+//                                        JOptionPane.ERROR_MESSAGE));
+//                            }
+//                            return null;
+//                        }
+//
+//                        @Override
+//                        protected void process(List<String> chunks) {
+//                            // update progress bar and status message with the latest values
+//                            String latestStatus = chunks.get(0); // status
+//                            String latestProgress = chunks.get(1); // value of progress bar as a string
+//                            progressLabel.setText(latestStatus);
+//                            progressBar.setValue(Integer.parseInt(latestProgress));
+//                        }
+//
+//                        @Override
+//                        protected void done() {
+//                            progressDialog.dispose();
+//                            if (isCancelled()) {
+//                                JOptionPane.showMessageDialog(BillInputView.this, "Operation was canceled.", "Canceled", JOptionPane.WARNING_MESSAGE);
+//                            }
+//                        }
+//                    };
 
                     cancelButton.addActionListener(event -> {
-                        worker.cancel(true);
+                       // worker.cancel(true);
                         progressDialog.dispose();
                     });
 
                     SwingUtilities.invokeLater(() -> progressDialog.setVisible(true));
-                    worker.execute();
+                   // worker.execute();
                 }
             }
         });
@@ -739,6 +746,8 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final BillInputState state = (BillInputState) evt.getNewValue();
+        //Populate Table
+        updateTableWithBillData(state.getTableData());
         //some error message according to lab
     }
 
@@ -748,6 +757,10 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 
     public void setBillInputController(BillInputController billInputController) {
         this.billInputController = billInputController;
+    }
+
+    public void setFileUploadController(FileUploadController fileUploadController) {
+        this.fileUploadController = fileUploadController;
     }
 
 //    public static void main(String[] args) {
