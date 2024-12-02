@@ -101,26 +101,25 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
                     String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                     String imageName = fileChooser.getSelectedFile().getName();
 
-                    // set up the process prompts
-                    JDialog progressDialog = new JDialog((Frame) null, "Processing Image", true);
-                    progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-                    progressDialog.setSize(400, 150);
-                    progressDialog.setLocationRelativeTo(BillInputView.this);
-
-                    JPanel progressPanel = new JPanel(new BorderLayout());
-                    JLabel progressLabel = new JLabel("Initializing...");
-                    JProgressBar progressBar = new JProgressBar(0, 100);
-                    progressBar.setValue(0);
-
-                    JButton cancelButton = new JButton("Cancel");
-                    progressPanel.add(progressLabel, BorderLayout.NORTH);
-                    progressPanel.add(progressBar, BorderLayout.CENTER);
-                    progressPanel.add(cancelButton, BorderLayout.SOUTH);
-                    progressDialog.add(progressPanel);
-
                     //FileUploadUseCase
                     fileUploadController.execute(filePath);
 
+//                    // set up the process prompts
+//                    JDialog progressDialog = new JDialog((Frame) null, "Processing Image", true);
+//                    progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+//                    progressDialog.setSize(400, 150);
+//                    progressDialog.setLocationRelativeTo(BillInputView.this);
+//
+//                    JPanel progressPanel = new JPanel(new BorderLayout());
+//                    JLabel progressLabel = new JLabel("Initializing...");
+//                    JProgressBar progressBar = new JProgressBar(0, 100);
+//                    progressBar.setValue(0);
+//
+//                    JButton cancelButton = new JButton("Cancel");
+//                    progressPanel.add(progressLabel, BorderLayout.NORTH);
+//                    progressPanel.add(progressBar, BorderLayout.CENTER);
+//                    progressPanel.add(cancelButton, BorderLayout.SOUTH);
+//                    progressDialog.add(progressPanel);
 
 //                     set up swing worker
 //                    SwingWorker<Void, String> worker = new SwingWorker<>() {
@@ -192,13 +191,13 @@ public class BillInputView extends JPanel implements ActionListener, PropertyCha
 //                        }
 //                    };
 
-                    cancelButton.addActionListener(event -> {
-                       // worker.cancel(true);
-                        progressDialog.dispose();
-                    });
+//                    cancelButton.addActionListener(event -> {
+//                       // worker.cancel(true);
+//                        progressDialog.dispose();
+//                    });
 
-                    SwingUtilities.invokeLater(() -> progressDialog.setVisible(true));
-                   // worker.execute();
+//                    SwingUtilities.invokeLater(() -> progressDialog.setVisible(true));
+//                   // worker.execute();
                 }
             }
         });
