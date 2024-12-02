@@ -20,8 +20,11 @@ This program serves to reduce to complications of splitting the bill through two
 
 ## Features of the Software
 Manual Input: manually input the bill information
+
 Receipt Upload: upload a picture of the receipt of the bill information
+
 View History: view past order histories
+
 Check Debtors & Write off: check the current balance of the people who owe money and write off an amount of their debt
 
 ## Installation Instructions
