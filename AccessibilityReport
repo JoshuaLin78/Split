@@ -1,0 +1,26 @@
+Accessibility report
+
+Principle of Universal Design
+
+Equitable Use: The option to either manually input the bill information or upload a picture of the receipt allows users with different technological comforts to still effectively and easily use the program. A future feature like voice input would also help those with visual impairments or mobility issues.
+
+Flexibility in Use: The program offers two options for inputting the bill, both equally effective. This allows the user to choose which option they feel most comfortable using.
+
+Simple and Intuitive: Our program interface has clear labels for each feature and is easy to navigate. We have also included a tooltip/placeholder text in the bill input to instruct users for the ‘Ordered By’ input.
+
+Perceptible Information: The information shown when inputting and confirming the bill is very concise and does not overload the user with too much information.
+
+Tolerance for Error: This program has a confirmation view after the user submits the bill to ensure all the information is correct.
+
+Low Physical Effort: The program is fast and easy to use and the bill picture upload allows for a quicker input if the user does not want to manually input the bill.
+
+Size and Space for Approach and Use: All information and features are fairly easy to navigate, however, in the future, magnification or options to make bigger buttons can be implemented to further accommodate every user.
+
+
+Marketing Target
+
+Since there are many diverse groups of people who eat out in big groups, this program can appeal to most groups. More specifically marketing toward students, families, workers, and all groups who frequently eat out would be most rewarding. Students often go out to eat in big groups and workers who are meeting clients for lunch or dinner can have an easy app to keep track of expenses.
+
+Demographic Limitations
+
+This program may be less used by older demographics as they eat out less with bigger groups and do not split the bill as often as a younger demographic. In addition, although our program is simple, they still might be less knowledgeable about using technology and may not feel comfortable using a program. In addition, demographics with visual or mobility impairment would struggle with using our program.
