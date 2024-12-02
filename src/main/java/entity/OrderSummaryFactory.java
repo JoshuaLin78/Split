@@ -15,7 +15,7 @@ public class OrderSummaryFactory {
      * @param total total in dollars.
      * @return the new dish
      */
-    OrderSummary create(List<Order> orders, double tax, double tip, double total){
+    public OrderSummary create(List<Order> orders, double tax, double tip, double total){
         return new OrderSummary(orders, tax, tip, total);
     }
 }

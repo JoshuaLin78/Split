@@ -17,8 +17,8 @@ public class BillInputInputData {
     /**
      * Constructor
      * @param orders the list of all orders on the bill
-     * @param tax the tax percentage of the bill
-     * @param tip the tip percentage of the bill
+     * @param tax the tax percentage of the bill (as a percentage)
+     * @param tip the tip percentage of the bill (as a percentage)
      * @param total the total price of the bill
      */
     public BillInputInputData(List<Order> orders, double subtotal, double tax, double tip, double total) {
