@@ -1,4 +1,6 @@
-package api;
+package frameworks;
+
+import use_cases.file_upload.interfaces.OCRProcessorInterface;
 
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
@@ -13,11 +15,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class OCRProcessor {
+public class GoogleVisionOCRProcessor implements OCRProcessorInterface {
 
     private static final String CREDENTIALS_PATH = "C:\\Users\\joshu\\Downloads\\ornate-antler-441920-i7-c1f0d0c573ae.json"; // Replace with your credentials file path
 
-    public static String processImage(File file) {
+    public GoogleVisionOCRProcessor() {
+    }
+
+    @Override
+    public String processImage(File file){
         try {
             // Load credentials from the JSON key file
             GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(CREDENTIALS_PATH));
