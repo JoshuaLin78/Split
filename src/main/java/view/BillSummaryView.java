@@ -29,80 +29,136 @@ public class BillSummaryView extends JPanel implements ActionListener, PropertyC
         this.billSummaryViewModel = billSummaryModel;
         billSummaryViewModel.addPropertyChangeListener(this);
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(20, 20));
         setSize(800, 600);
+        setBackground(new Color(250, 250, 250)); // Light gray background
 
+
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BorderLayout());
+        headerPanel.setBackground(new Color(100, 149, 237)); // Cornflower blue
 
         JLabel titleLabel = new JLabel("Bill Summary", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        add(titleLabel, BorderLayout.NORTH);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
+
+        add(headerPanel, BorderLayout.NORTH);
+
 
         scrollablePanel = new JPanel();
         scrollablePanel.setLayout(new BoxLayout(scrollablePanel, BoxLayout.Y_AXIS));
+        scrollablePanel.setBackground(Color.WHITE);
+
         scrollPane = new JScrollPane(scrollablePanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
         add(scrollPane, BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
 
-        JPanel summaryPanel = new JPanel(new GridLayout(1, 1));
+        JPanel bottomPanel = new JPanel(new BorderLayout(10, 10));
+        bottomPanel.setOpaque(false);
 
-        bottomPanel.add(summaryPanel);
 
-        taxLabel = new JLabel("Tax: $0.00", SwingConstants.CENTER);
-        tipLabel = new JLabel("Tips: $0.00", SwingConstants.CENTER);
-        totalLabel = new JLabel("Grand Total: $0.00", SwingConstants.CENTER);
-
-        taxLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        tipLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        totalLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        JPanel summaryPanel = new JPanel(new GridLayout(1, 3, 10, 0));
+        summaryPanel.setOpaque(false);
+        taxLabel = createSummaryLabel("Tax: $0.00");
+        tipLabel = createSummaryLabel("Tips: $0.00");
+        totalLabel = createSummaryLabel("Grand Total: $0.00");
 
         summaryPanel.add(taxLabel);
         summaryPanel.add(tipLabel);
         summaryPanel.add(totalLabel);
 
-        bottomPanel.add(summaryPanel);
-
+        bottomPanel.add(summaryPanel, BorderLayout.NORTH);
 
 
         JPanel buttonPanel = new JPanel();
-        JButton doneButton = new JButton("Back");
+        buttonPanel.setOpaque(false);
+        JButton backButton = createModernButton("Back");
 
-        doneButton.addActionListener(this);
+        backButton.addActionListener(this);
 
-        buttonPanel.add(doneButton);
-
-        bottomPanel.add(buttonPanel);
+        buttonPanel.add(backButton);
+        bottomPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(bottomPanel, BorderLayout.SOUTH);
+    }
 
-        setVisible(true);
+    private JLabel createSummaryLabel(String text) {
+        JLabel label = new JLabel(text, SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setForeground(new Color(80, 80, 80)); // Medium gray
+        return label;
+    }
+
+    private JButton createModernButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.PLAIN, 16));
+        button.setFocusPainted(false);
+        button.setBackground(Color.WHITE);
+        button.setForeground(Color.BLACK);
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(230, 230, 250)); // Light lavender
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(Color.WHITE);
+            }
+        });
+        return button;
     }
 
     private void updateScrollablePanel(OrderSummary orderSummary) {
         scrollablePanel.removeAll();
-        for (Order order : orderSummary.getOrders()) {
-            JLabel nameLabel = new JLabel(order.getName(), SwingConstants.LEFT);
-            nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
-            scrollablePanel.add(nameLabel);
 
-            double price = order.getPrice();
-            int quantity = order.getQuantity();
-            String[] consumers = order.getConsumers();
-            double subtotal = price * quantity;
+        if (orderSummary == null || orderSummary.getOrders() == null || orderSummary.getOrders().isEmpty()) {
+            JLabel emptyLabel = new JLabel("No orders to display.", SwingConstants.CENTER);
+            emptyLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+            emptyLabel.setForeground(new Color(150, 150, 150)); // Subtle gray
+            scrollablePanel.add(emptyLabel);
+        } else {
+            for (Order order : orderSummary.getOrders()) {
+                JLabel nameLabel = new JLabel(order.getName(), SwingConstants.LEFT);
+                nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                nameLabel.setForeground(new Color(60, 63, 65)); // Dark gray
+                scrollablePanel.add(nameLabel);
 
-            JLabel subtotalLabel = new JLabel(order.getName() + " (" + String.format("$%.2f", price) + ")"
-                    + " x" + String.valueOf(quantity) + ": " + String.format("$%.2f", subtotal), SwingConstants.LEFT);
+                double price = order.getPrice();
+                int quantity = order.getQuantity();
+                String[] consumers = order.getConsumers();
+                double subtotal = price * quantity;
 
+                JLabel subtotalLabel = new JLabel(order.getName() + " (" + String.format("$%.2f", price) + ")"
+                        + " x" + quantity + ": " + String.format("$%.2f", subtotal), SwingConstants.LEFT);
 
-            String orderedBy = "Ordered By: " + String.join(", ", consumers);
+                subtotalLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+                subtotalLabel.setForeground(new Color(90, 90, 90)); // Medium gray
 
-            JLabel consumerLabel = new JLabel(String.valueOf(orderedBy), SwingConstants.LEFT);
-            scrollablePanel.add(subtotalLabel);
-            scrollablePanel.add(consumerLabel);
+                String orderedBy = "Ordered By: " + String.join(", ", consumers);
+                JLabel consumerLabel = new JLabel(orderedBy, SwingConstants.LEFT);
+                consumerLabel.setFont(new Font("Arial", Font.ITALIC, 14));
+                consumerLabel.setForeground(new Color(100, 100, 100)); // Subtle gray
+
+                scrollablePanel.add(subtotalLabel);
+                scrollablePanel.add(consumerLabel);
+            }
         }
 
+
         scrollablePanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+
 
         scrollablePanel.revalidate();
         scrollablePanel.repaint();
@@ -132,6 +188,4 @@ public class BillSummaryView extends JPanel implements ActionListener, PropertyC
     public void setBillSummaryController(BillSummaryController billSummaryController) {
         this.billSummaryController = billSummaryController;
     }
-
 }
-
