@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 
 import javax.swing.*;
 
-import api.OCRProcessor;
 import data_access.InMemoryDebtorDataAccessObject;
 import entity.DebtorFactory;
 import frameworks.GoogleVisionOCRProcessor;
