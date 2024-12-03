@@ -13,4 +13,6 @@ public interface WriteOffDebtDebtorDataAccessInterface {
     Debtor get(String name);
 
     List<Debtor> getAll();
+
+    void saveNew(Debtor debtor);
 }

@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class GoogleVisionOCRProcessor implements OCRProcessorInterface {
 
-    private static final String CREDENTIALS_PATH = "C:\\Users\\wesle\\Downloads\\ornate-antler-441920-i7-c1f0d0c573ae.json";
+    private static final String CREDENTIALS_PATH = "C:\\Users\\joshu\\Downloads\\ornate-antler-441920-i7-c1f0d0c573ae.json";
 
     public GoogleVisionOCRProcessor() {
     }
