@@ -1,6 +1,5 @@
 package use_cases.file_upload;
 
-import use_cases.bill_input.BillInputOutputData;
 import use_cases.file_upload.interfaces.JsonParserInterface;
 import use_cases.file_upload.interfaces.OCRProcessorInterface;
 import use_cases.file_upload.interfaces.TextOrganizerInterface;

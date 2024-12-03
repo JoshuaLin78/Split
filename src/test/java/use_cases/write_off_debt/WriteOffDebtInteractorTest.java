@@ -38,3 +38,4 @@ public class WriteOffDebtInteractorTest {
         interactor.execute(inputData);
     }
 }
+
